@@ -38,3 +38,12 @@ traffic across 3 instances of the application
 6. (Bonus) Create the Kubernetes deployment, service and ingress files required to replace the
 above Docker Compose environment
 7. (Bonus) Code instrumentation (e.g. logging, metrics)
+
+### Features
+
+1. **-** Documented HTTP Api;
+2. **-** API could response with JSON or ProtocolBuffers;
+3. **-** Carry big load. 3000 requests per second;
+4. **-** Use LiveView for displaying data in web forms;
+5. **-** Have administrator page;
+6. **-** Load data with forms or by downloading CSV files.
