@@ -20,7 +20,7 @@ defmodule FootballSeasons.MixProject do
   def application do
     [
       mod: {FootballSeasons.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :memento]
     ]
   end
 
@@ -41,6 +41,9 @@ defmodule FootballSeasons.MixProject do
       {:phoenix_ecto, "~> 4.0"},
       {:ecto_sql, "~> 3.1"},
       {:postgrex, ">= 0.0.0"},
+      {:ecto_observable, "~> 0.4"},
+      # Caching database for providing high speed searching for seasons
+      {:memento, "~> 0.3.1"},
 
       # Tools
       {:phoenix_html, "~> 2.11"},
