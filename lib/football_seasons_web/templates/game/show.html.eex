@@ -1,0 +1,64 @@
+<h1>Show Game</h1>
+
+<ul>
+
+  <li>
+    <strong>Division:</strong>
+    <%= @game.division %>
+  </li>
+
+  <li>
+    <strong>Season:</strong>
+    <%= @game.season %>
+  </li>
+
+  <li>
+    <strong>Date:</strong>
+    <%= @game.date %>
+  </li>
+
+  <li>
+    <strong>Home team:</strong>
+    <%= @game.home_team_id %>
+  </li>
+
+  <li>
+    <strong>Away team:</strong>
+    <%= @game.away_team_id %>
+  </li>
+
+  <li>
+    <strong>Hthg:</strong>
+    <%= @game.hthg %>
+  </li>
+
+  <li>
+    <strong>Htag:</strong>
+    <%= @game.htag %>
+  </li>
+
+  <li>
+    <strong>Htr:</strong>
+    <%= get_htr(@game) %>
+  </li>
+
+  <li>
+    <strong>Fthg:</strong>
+    <%= @game.fthg %>
+  </li>
+
+  <li>
+    <strong>Ftag:</strong>
+    <%= @game.ftag %>
+  </li>
+
+  <li>
+    <strong>Ftr:</strong>
+    <%= get_ftr(@game) %>
+  </li>
+
+
+</ul>
+
+<span><%= link "Edit", to: Routes.game_path(@conn, :edit, @game) %></span>
+<span><%= link "Back", to: Routes.game_path(@conn, :index) %></span>

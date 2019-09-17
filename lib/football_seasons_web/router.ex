@@ -16,6 +16,9 @@ defmodule FootballSeasonsWeb.Router do
   scope "/", FootballSeasonsWeb do
     pipe_through :browser
 
+    resources "/games", GameController
+    resources "/teams", TeamController
+
     get "/", PageController, :index
   end
 

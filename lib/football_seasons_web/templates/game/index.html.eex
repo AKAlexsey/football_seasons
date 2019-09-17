@@ -1,0 +1,46 @@
+<h1>Listing Games</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Division</th>
+      <th>Season</th>
+      <th>Date</th>
+      <th>Home team</th>
+      <th>Away team</th>
+      <th>Hthg</th>
+      <th>Htag</th>
+      <th>Htr</th>
+      <th>Fthg</th>
+      <th>Ftag</th>
+      <th>Ftr</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for game <- @games do %>
+    <tr>
+      <td><%= game.division %></td>
+      <td><%= game.season %></td>
+      <td><%= game.date %></td>
+      <td><%= game.home_team_id %></td>
+      <td><%= game.away_team_id %></td>
+      <td><%= game.hthg %></td>
+      <td><%= game.htag %></td>
+      <td><%= get_htr(game) %></td>
+      <td><%= game.fthg %></td>
+      <td><%= game.ftag %></td>
+      <td><%= get_ftr(game) %></td>
+
+      <td>
+        <span><%= link "Show", to: Routes.game_path(@conn, :show, game) %></span>
+        <span><%= link "Edit", to: Routes.game_path(@conn, :edit, game) %></span>
+        <span><%= link "Delete", to: Routes.game_path(@conn, :delete, game), method: :delete, data: [confirm: "Are you sure?"] %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Game", to: Routes.game_path(@conn, :new) %></span>

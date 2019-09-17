@@ -47,3 +47,17 @@ above Docker Compose environment
 4. **-** Use LiveView for displaying data in web forms;
 5. **-** Have administrator page;
 6. **-** Load data with forms or by downloading CSV files.
+
+### Data.csv fields description
+
+Div = League Division
+Season = Footbal season (2016-2017 -> 201617)
+Date = Match Date (dd/mm/yy)
+HomeTeam = Home Team
+AwayTeam = Away Team
+FTHG and HG = Full Time Home Team Goals
+FTAG and AG = Full Time Away Team Goals
+FTR and Res = Full Time Result (H=Home Win, D=Draw, A=Away Win)
+HTHG = Half Time Home Team Goals
+HTAG = Half Time Away Team Goals
+HTR = Half Time Result (H=Home Win, D=Draw, A=Away Win)
