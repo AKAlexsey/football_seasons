@@ -53,7 +53,10 @@ defmodule FootballSeasons.MixProject do
       {:plug_cowboy, "~> 2.0"},
 
       # Code quality
-      {:credo, "~> 1.1.0", only: [:dev, :test], runtime: false}
+      {:credo, "~> 1.1.0", only: [:dev, :test], runtime: false},
+
+      # Test
+      {:ex_machina, "~> 2.3", only: [:test]}
     ]
   end
 

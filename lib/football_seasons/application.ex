@@ -3,10 +3,14 @@ defmodule FootballSeasons.Application do
 
   use Application
 
+  alias FootballSeasons.{BackgroundJobsWorker, Repo}
+  alias FootballSeasonsWeb.Endpoint
+
   def start(_type, _args) do
     children = [
-      FootballSeasons.Repo,
-      FootballSeasonsWeb.Endpoint
+      Repo,
+      Endpoint,
+      BackgroundJobsWorker
     ]
 
     opts = [strategy: :one_for_one, name: FootballSeasons.Supervisor]

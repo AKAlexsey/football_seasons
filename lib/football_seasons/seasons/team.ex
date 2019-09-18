@@ -2,7 +2,11 @@ defmodule FootballSeasons.Seasons.Team do
   @moduledoc false
 
   use Ecto.Schema
+  use Observable, :notifier
+
   import Ecto.Changeset
+
+  alias FootballSeasons.RefreshTeamGamesObserver
   alias FootballSeasons.Seasons.Game
 
   @type t :: %__MODULE__{}
@@ -23,5 +27,11 @@ defmodule FootballSeasons.Seasons.Team do
     team
     |> cast(attrs, @cast_fields)
     |> validate_required(@required_fields)
+  end
+
+  observations do
+    action(:insert, [RefreshTeamGamesObserver])
+    action(:update, [RefreshTeamGamesObserver])
+    action(:delete, [RefreshTeamGamesObserver])
   end
 end

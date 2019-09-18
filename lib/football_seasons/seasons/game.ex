@@ -2,7 +2,11 @@ defmodule FootballSeasons.Seasons.Game do
   @moduledoc false
 
   use Ecto.Schema
+  use Observable, :notifier
+
   import Ecto.Changeset
+
+  alias FootballSeasons.CacheRecordObserver
   alias FootballSeasons.Seasons.Team
 
   @type t :: %__MODULE__{}
@@ -49,5 +53,11 @@ defmodule FootballSeasons.Seasons.Game do
     game
     |> cast(attrs, @cast_fields)
     |> validate_required(@required_fields)
+  end
+
+  observations do
+    action(:insert, [CacheRecordObserver])
+    action(:update, [CacheRecordObserver])
+    action(:delete, [CacheRecordObserver])
   end
 end

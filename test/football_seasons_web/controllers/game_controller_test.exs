@@ -1,26 +1,20 @@
 defmodule FootballSeasonsWeb.GameControllerTest do
   use FootballSeasonsWeb.ConnCase
 
-  alias FootballSeasons.Seasons
-
   @create_attrs %{
-    away_team_id: 42,
     date: ~D[2010-04-17],
     division: "some division",
     ftag: 42,
     fthg: 42,
-    home_team_id: 42,
     htag: 42,
     hthg: 42,
     season: "some season"
   }
   @update_attrs %{
-    away_team_id: 43,
     date: ~D[2011-05-18],
     division: "some updated division",
     ftag: 43,
     fthg: 43,
-    home_team_id: 43,
     htag: 43,
     hthg: 43,
     season: "some updated season"
@@ -36,11 +30,6 @@ defmodule FootballSeasonsWeb.GameControllerTest do
     hthg: nil,
     season: nil
   }
-
-  def fixture(:game) do
-    {:ok, game} = Seasons.create_game(@create_attrs)
-    game
-  end
 
   describe "index" do
     test "lists all games", %{conn: conn} do
@@ -58,7 +47,12 @@ defmodule FootballSeasonsWeb.GameControllerTest do
 
   describe "create game" do
     test "redirects to show when data is valid", %{conn: conn} do
-      conn = post(conn, Routes.game_path(conn, :create), game: @create_attrs)
+      %{id: home_team_id} = insert(:team)
+      %{id: away_team_id} = insert(:team)
+
+      attrs = Map.merge(@create_attrs, %{home_team_id: home_team_id, away_team_id: away_team_id})
+
+      conn = post(conn, Routes.game_path(conn, :create), game: attrs)
 
       assert %{id: id} = redirected_params(conn)
       assert redirected_to(conn) == Routes.game_path(conn, :show, id)
@@ -113,7 +107,7 @@ defmodule FootballSeasonsWeb.GameControllerTest do
   end
 
   defp create_game(_) do
-    game = fixture(:game)
+    game = insert(:game)
     {:ok, game: game}
   end
 end

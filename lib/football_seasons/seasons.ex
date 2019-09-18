@@ -6,7 +6,7 @@ defmodule FootballSeasons.Seasons do
   import Ecto.Query, warn: false
   alias FootballSeasons.Repo
 
-  alias FootballSeasons.Seasons.Team
+  alias FootballSeasons.Seasons.{Game, Team}
 
   @doc """
   Returns the list of teams.
@@ -36,6 +36,35 @@ defmodule FootballSeasons.Seasons do
 
   """
   def get_team!(id), do: Repo.get!(Team, id)
+
+  @doc """
+  Gets a single team.
+
+  Raises return if the Team does not exist.
+
+  ## Examples
+
+      iex> get_team(123)
+      %Team{}
+
+      iex> get_team(456)
+      nil
+
+  """
+  def get_team(id), do: Repo.get(Team, id)
+
+  @doc """
+  Return all games where team took part as home or away team
+  """
+  @spec get_team_games(map | integer) :: list
+  def get_team_games(team_id) when is_integer(team_id) do
+    from(g in Game, where: g.home_team_id == ^team_id or g.away_team_id == ^team_id)
+    |> Repo.all()
+  end
+
+  def get_team_games(%{id: team_id} = record) when is_map(record) do
+    get_team_games(team_id)
+  end
 
   @doc """
   Creates a team.
@@ -102,8 +131,6 @@ defmodule FootballSeasons.Seasons do
     Team.changeset(team, %{})
   end
 
-  alias FootballSeasons.Seasons.Game
-
   @doc """
   Returns the list of games.
 
@@ -113,8 +140,10 @@ defmodule FootballSeasons.Seasons do
       [%Game{}, ...]
 
   """
-  def list_games do
-    Repo.all(Game)
+  def list_games(preload \\ []) do
+    Game
+    |> Repo.all()
+    |> Repo.preload(preload)
   end
 
   @doc """
@@ -148,7 +177,7 @@ defmodule FootballSeasons.Seasons do
   def create_game(attrs \\ %{}) do
     %Game{}
     |> Game.changeset(attrs)
-    |> Repo.insert()
+    |> Repo.insert_and_notify()
   end
 
   @doc """
@@ -166,7 +195,7 @@ defmodule FootballSeasons.Seasons do
   def update_game(%Game{} = game, attrs) do
     game
     |> Game.changeset(attrs)
-    |> Repo.update()
+    |> Repo.update_and_notify()
   end
 
   @doc """
@@ -182,7 +211,7 @@ defmodule FootballSeasons.Seasons do
 
   """
   def delete_game(%Game{} = game) do
-    Repo.delete(game)
+    Repo.delete_and_notify(game)
   end
 
   @doc """
