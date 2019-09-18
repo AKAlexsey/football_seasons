@@ -7,12 +7,14 @@ defmodule FootballSeasons.BackgroundJobsWorker do
 
   alias FootballSeasons.Caching.CacheRecordService
 
+  @caching_timeout 3000
+
   def start_link(_) do
     GenServer.start_link(__MODULE__, %{}, name: __MODULE__)
   end
 
   def init(_) do
-    Process.send_after(self(), :cache_database, 0)
+    Process.send_after(self(), :cache_database, @caching_timeout)
     {:ok, %{}}
   end
 

@@ -14,7 +14,7 @@ defmodule FootballSeasons.Caching.MnesiaRecordHandler.GameHandler do
     Memento.transaction(fn ->
       %Game{}
       |> Map.merge(attrs)
-      |> Map.put(:division_and_season, "#{division}_#{season}")
+      |> Map.put(:division_and_season, Game.make_division_and_season(division, season))
       |> Memento.Query.write()
     end)
   end

@@ -21,4 +21,8 @@ defmodule FootballSeasons.Caching.Game do
     ],
     index: [:division, :season, :division_and_season, :date, :home_team_name, :away_team_name],
     type: :ordered_set
+
+  def make_division_and_season(division, season) do
+    "#{division}_#{season}"
+  end
 end

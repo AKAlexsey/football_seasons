@@ -30,6 +30,9 @@ config :football_seasons, FootballSeasonsWeb.Endpoint,
     ]
   ]
 
+# Api configuration
+config :football_seasons, :plug_configuration, port: 4001
+
 # ## SSL Support
 #
 # In order to use HTTPS in development, a self-signed

@@ -17,6 +17,9 @@ config :football_seasons, FootballSeasonsWeb.Endpoint,
   render_errors: [view: FootballSeasonsWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: FootballSeasons.PubSub, adapter: Phoenix.PubSub.PG2]
 
+# Api configuration
+config :football_seasons, :plug_configuration, port: 80
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
