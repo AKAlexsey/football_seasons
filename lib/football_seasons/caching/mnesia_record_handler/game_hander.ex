@@ -20,7 +20,7 @@ defmodule FootballSeasons.Caching.MnesiaRecordHandler.GameHandler do
     end)
   end
 
-  def encode_params_for_caching(attrs) do
+  defp encode_params_for_caching(attrs) do
     attrs
     |> Map.delete(:id)
     |> Jason.encode!()

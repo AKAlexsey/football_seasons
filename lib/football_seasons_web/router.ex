@@ -18,7 +18,9 @@ defmodule FootballSeasonsWeb.Router do
 
     resources "/games", GameController
     resources "/teams", TeamController
+    resources "/users", UserController
     resources "/files", FileController, only: [:new, :create]
+    resources "/sessions", SessionController, only: [:new, :create, :delete]
 
     get "/", PageController, :index
   end

@@ -48,7 +48,7 @@ above Docker Compose environment
 3. **-** Carry big load. 3000 requests per second;
 4. **-** Use LiveView for displaying data in web forms;
 5. **-** Have administrator page;
-6. **-** Load data with forms or by downloading CSV files.
+6. **+** Load data with forms or by downloading CSV files.
 
 ### Data.csv fields description
 
