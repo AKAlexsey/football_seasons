@@ -4,6 +4,7 @@ defmodule FootballSeasons.Factory do
   use ExMachina.Ecto, repo: FootballSeasons.Repo
 
   alias FootballSeasons.Seasons.{Game, Team}
+  alias FootballSeasons.Users.User
 
   def game_factory(attrs) do
     %Game{
@@ -34,6 +35,16 @@ defmodule FootballSeasons.Factory do
   def team_factory(attrs) do
     %Team{
       name: sequence(:name, &"Team name ##{&1}")
+    }
+    |> Map.merge(attrs)
+  end
+
+  def user_factory(attrs) do
+    %User{
+      email: sequence(:email, &"test.emamil#{&1}@example.com"),
+      is_admin: false,
+      name: sequence(:name, &"Name#{&1}"),
+      password_hash: "123123123"
     }
     |> Map.merge(attrs)
   end

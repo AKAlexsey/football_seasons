@@ -35,9 +35,9 @@ config :phoenix, :json_library, Jason
 config :mnesia,
   dir: '.mnesia/#{Mix.env()}/#{node()}'
 
-config :cti_kaltura, FootballSeasons.Authorization.Guardian,
-       issuer: "SimpleAuth",
-       secret_key: "U7fWw3uDlga9DRB"
+config :football_seasons, FootballSeasons.Authorization.Guardian,
+  issuer: "SimpleAuth",
+  secret_key: "U7fWw3uDlga9DRB"
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

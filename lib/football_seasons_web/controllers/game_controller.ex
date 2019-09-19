@@ -19,7 +19,7 @@ defmodule FootballSeasonsWeb.GameController do
       {:ok, game} ->
         conn
         |> put_flash(:info, "Game created successfully.")
-        |> redirect(to: Routes.game_path(conn, :show, game))
+        |> redirect(to: game_path(conn, :show, game))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
@@ -44,7 +44,7 @@ defmodule FootballSeasonsWeb.GameController do
       {:ok, game} ->
         conn
         |> put_flash(:info, "Game updated successfully.")
-        |> redirect(to: Routes.game_path(conn, :show, game))
+        |> redirect(to: game_path(conn, :show, game))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", game: game, changeset: changeset)
@@ -57,6 +57,6 @@ defmodule FootballSeasonsWeb.GameController do
 
     conn
     |> put_flash(:info, "Game deleted successfully.")
-    |> redirect(to: Routes.game_path(conn, :index))
+    |> redirect(to: game_path(conn, :index))
   end
 end

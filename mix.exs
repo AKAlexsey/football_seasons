@@ -20,7 +20,14 @@ defmodule FootballSeasons.MixProject do
   def application do
     [
       mod: {FootballSeasons.Application, []},
-      extra_applications: [:logger, :runtime_tools, :memento, :plug_cowboy, :nimble_csv, :comeonin]
+      extra_applications: [
+        :logger,
+        :runtime_tools,
+        :memento,
+        :plug_cowboy,
+        :nimble_csv,
+        :comeonin
+      ]
     ]
   end
 

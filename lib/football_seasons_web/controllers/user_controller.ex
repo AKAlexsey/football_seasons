@@ -1,9 +1,9 @@
 defmodule FootballSeasonsWeb.UserController do
   use FootballSeasonsWeb, :controller
 
+  alias FootballSeasons.Repo
   alias FootballSeasons.Users
   alias FootballSeasons.Users.User
-  alias FootballSeasons.Repo
 
   plug :scrub_params, "user" when action in [:create]
 
@@ -19,11 +19,13 @@ defmodule FootballSeasonsWeb.UserController do
 
   def create(conn, %{"user" => user_params}) do
     changeset = %User{} |> User.registration_changeset(user_params)
+
     case Repo.insert(changeset) do
       {:ok, user} ->
         conn
         |> put_flash(:info, "#{user.name} created!")
-        |> redirect(to: Routes.user_path(conn, :show, user))
+        |> redirect(to: user_path(conn, :show, user))
+
       {:error, changeset} ->
         IO.puts("!!! fail user creation #{inspect(changeset)}")
         render(conn, "new.html", changeset: changeset)
@@ -48,7 +50,7 @@ defmodule FootballSeasonsWeb.UserController do
       {:ok, user} ->
         conn
         |> put_flash(:info, "User updated successfully.")
-        |> redirect(to: Routes.user_path(conn, :show, user))
+        |> redirect(to: user_path(conn, :show, user))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "edit.html", user: user, changeset: changeset)
@@ -61,6 +63,6 @@ defmodule FootballSeasonsWeb.UserController do
 
     conn
     |> put_flash(:info, "User deleted successfully.")
-    |> redirect(to: Routes.user_path(conn, :index))
+    |> redirect(to: user_path(conn, :index))
   end
 end

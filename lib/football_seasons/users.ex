@@ -101,4 +101,8 @@ defmodule FootballSeasons.Users do
   def change_user(%User{} = user) do
     User.changeset(user, %{})
   end
+
+  def user_by_email(email) do
+    Repo.get_by(User, email: email)
+  end
 end

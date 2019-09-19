@@ -6,8 +6,18 @@ defmodule FootballSeasons.UsersTest do
   describe "users" do
     alias FootballSeasons.Users.User
 
-    @valid_attrs %{email: "some email", is_admin: true, name: "some name", password_hash: "some password_hash"}
-    @update_attrs %{email: "some updated email", is_admin: false, name: "some updated name", password_hash: "some updated password_hash"}
+    @valid_attrs %{
+      email: "some email",
+      is_admin: true,
+      name: "some name",
+      password_hash: "some password_hash"
+    }
+    @update_attrs %{
+      email: "some updated email",
+      is_admin: false,
+      name: "some updated name",
+      password_hash: "some updated password_hash"
+    }
     @invalid_attrs %{email: nil, is_admin: nil, name: nil, password_hash: nil}
 
     def user_fixture(attrs \\ %{}) do

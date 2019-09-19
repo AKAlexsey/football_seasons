@@ -12,12 +12,12 @@ defmodule FootballSeasonsWeb.FileController do
       {:ok, file_name} ->
         conn
         |> put_flash(:info, "#{file_name} uploaded successfully.")
-        |> redirect(to: Routes.game_path(conn, :index))
+        |> redirect(to: game_path(conn, :index))
 
       {:error, reason} ->
         conn
         |> put_flash(:error, "#{reason}")
-        |> redirect(to: Routes.file_path(conn, :new))
+        |> redirect(to: file_path(conn, :new))
     end
   end
 end

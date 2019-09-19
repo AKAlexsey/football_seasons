@@ -24,14 +24,4 @@ defmodule FootballSeasons.Authorization.Service do
         {:error, :not_found}
     end
   end
-
-  # TODO substitute to macro. For authomatic preloading before each controller action
-  # Macro use cases:
-  # `use FootballSeasons.Authorization.LoadUser, only: [:new, :create, :index]`
-  # `use FootballSeasons.Authorization.LoadUser, except: [:edit, :update]`
-  # `use FootballSeasons.Authorization.LoadUser`
-  @spec load_user(conn :: Plug.Conn.t()) :: User.t() | nil
-  def load_user(conn) do
-    Guardian.Plug.current_resource(conn)
-  end
 end

@@ -1,11 +1,11 @@
 <h1>Listing Games</h1>
 
 <div>
-  <span><%= link "New Game", to: Routes.game_path(@conn, :new) %></span>
+  <span><%= link "New Game", to: game_path(@conn, :new) %></span>
 </div>
 
 <div>
-  <span><%= link "Upload CSV file", to: Routes.file_path(@conn, :new) %></span>
+  <span><%= link "Upload CSV file", to: file_path(@conn, :new) %></span>
 </div>
 
 <table>
@@ -42,9 +42,9 @@
       <td><%= get_ftr(game) %></td>
 
       <td>
-        <span><%= link "Show", to: Routes.game_path(@conn, :show, game) %></span>
-        <span><%= link "Edit", to: Routes.game_path(@conn, :edit, game) %></span>
-        <span><%= link "Delete", to: Routes.game_path(@conn, :delete, game), method: :delete, data: [confirm: "Are you sure?"] %></span>
+        <span><%= link "Show", to: game_path(@conn, :show, game) %></span>
+        <span><%= link "Edit", to: game_path(@conn, :edit, game) %></span>
+        <span><%= link "Delete", to: game_path(@conn, :delete, game), method: :delete, data: [confirm: "Are you sure?"] %></span>
       </td>
     </tr>
 <% end %>
