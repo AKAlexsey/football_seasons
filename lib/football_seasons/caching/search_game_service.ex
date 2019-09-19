@@ -29,7 +29,9 @@ defmodule FootballSeasons.Caching.SearchGameService do
   end
 
   defp normalize_response({:ok, games}) do
-    Enum.map(games, &make_map/1)
+    games
+    |> Enum.join(", ")
+    |> (fn games -> "[#{games}]" end).()
   end
 
   @doc """
@@ -56,46 +58,18 @@ defmodule FootballSeasons.Caching.SearchGameService do
       :"$2",
       :"$3",
       :"$4",
-      :"$5",
-      :"$6",
-      :"$7",
-      :"$8",
-      :"$9",
-      :"$10",
-      :"$11",
-      :"$12",
-      :"$13"
+      :_,
+      :_,
+      :_,
+      :_,
+      :_,
+      :_,
+      :_,
+      :_,
+      :_,
+      :"$14"
     }
   end
 
-  defp select_fields, do: [:"$$"]
-
-  defp make_map([
-         division,
-         season,
-         _division_and_season,
-         date,
-         home_team_name,
-         away_team_name,
-         hthg,
-         htag,
-         htr,
-         fthg,
-         ftag,
-         ftr
-       ]) do
-    %{
-      division: division,
-      season: season,
-      date: date,
-      home_team_name: home_team_name,
-      away_team_name: away_team_name,
-      hthg: hthg,
-      htag: htag,
-      htr: htr,
-      fthg: fthg,
-      ftag: ftag,
-      ftr: ftr
-    }
-  end
+  defp select_fields, do: [:"$14"]
 end

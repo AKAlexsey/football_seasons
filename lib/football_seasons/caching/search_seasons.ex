@@ -8,9 +8,7 @@ defmodule FootballSeasons.Caching.SearchSeasons do
 
   @spec make_index_response(Plug.Conn.t()) :: {Plug.Conn.t(), integer, binary}
   def make_index_response(%Plug.Conn{} = conn) do
-    json_response =
-      SearchGameService.all_games()
-      |> Jason.encode!()
+    json_response = SearchGameService.all_games()
 
     {conn, 200, json_response}
   end
@@ -21,7 +19,6 @@ defmodule FootballSeasons.Caching.SearchSeasons do
       query_params
       |> fetch_params()
       |> SearchGameService.search_games()
-      |> Jason.encode!()
 
     {conn, 200, json_response}
   end

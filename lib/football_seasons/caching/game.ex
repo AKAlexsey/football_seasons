@@ -17,7 +17,8 @@ defmodule FootballSeasons.Caching.Game do
       :htr,
       :fthg,
       :ftag,
-      :ftr
+      :ftr,
+      :jason_cache
     ],
     index: [:division, :season, :division_and_season, :date, :home_team_name, :away_team_name],
     type: :ordered_set

@@ -18,6 +18,8 @@ defmodule FootballSeasonsWeb.ApiRouter do
 
   alias FootballSeasons.Seasons
 
+  # This callback added to compare velocity between requests to cache and database
+  # In fact most time spent in Jason.encode!() anyway in Mnesia we have cached JSON view
   get "/api/db_seasons" do
     games =
       Seasons.list_games()
