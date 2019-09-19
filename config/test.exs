@@ -15,7 +15,7 @@ config :football_seasons, FootballSeasonsWeb.Endpoint,
   server: false
 
 # Api configuration
-config :football_seasons, :plug_configuration, port: 4003
+config :football_seasons, :plug_configuration, api_port: 4003
 
 # Print only warnings and errors during test
 config :logger, level: :warn

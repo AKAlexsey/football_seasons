@@ -13,7 +13,7 @@ defmodule FootballSeasons.Application do
       Cowboy.child_spec(
         scheme: :http,
         plug: ApiRouter,
-        options: [port: Application.get_env(:football_seasons, :plug_configuration)[:port]]
+        options: [port: Application.get_env(:football_seasons, :plug_configuration)[:api_port]]
       ),
       Endpoint,
       Repo

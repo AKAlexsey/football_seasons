@@ -17,8 +17,11 @@ config :football_seasons, FootballSeasonsWeb.Endpoint,
   render_errors: [view: FootballSeasonsWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: FootballSeasons.PubSub, adapter: Phoenix.PubSub.PG2]
 
-# Api configuration
-config :football_seasons, :plug_configuration, port: 80
+config :football_seasons, :plug_configuration,
+  # Api port
+  api_port: 81,
+  # Restrict upload file size
+  maximum_upload_size: 10_485_760
 
 # Configures Elixir's Logger
 config :logger, :console,

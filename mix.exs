@@ -20,7 +20,7 @@ defmodule FootballSeasons.MixProject do
   def application do
     [
       mod: {FootballSeasons.Application, []},
-      extra_applications: [:logger, :runtime_tools, :memento, :plug_cowboy]
+      extra_applications: [:logger, :runtime_tools, :memento, :plug_cowboy, :nimble_csv]
     ]
   end
 
@@ -51,6 +51,8 @@ defmodule FootballSeasons.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
+      {:nimble_csv, "~> 0.3"},
+      {:timex, "~> 3.6"},
 
       # Code quality
       {:credo, "~> 1.1.0", only: [:dev, :test], runtime: false},

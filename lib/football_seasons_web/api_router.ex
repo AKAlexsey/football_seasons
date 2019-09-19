@@ -16,6 +16,26 @@ defmodule FootballSeasonsWeb.ApiRouter do
     send_resp(response_conn, status, body)
   end
 
+  alias FootballSeasons.Seasons
+
+  get "/api/db_seasons" do
+    games =
+      Seasons.list_games()
+      |> Enum.map(fn game ->
+        game
+        |> Map.delete(:__struct__)
+        |> Map.delete(:__meta__)
+        |> Map.delete(:home_team)
+        |> Map.delete(:away_team)
+        |> Map.delete(:id)
+        |> Map.delete(:inserted_at)
+        |> Map.delete(:updated_at)
+      end)
+      |> Jason.encode!()
+
+    send_resp(conn, 200, games)
+  end
+
   get "/api/seasons/search" do
     {response_conn, status, body} = SearchSeasons.make_search_response(conn)
     send_resp(response_conn, status, body)

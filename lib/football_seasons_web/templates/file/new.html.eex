@@ -1,0 +1,5 @@
+<h3>Choose file with games data</h3>
+
+<%= render "form.html", Map.put(assigns, :action, Routes.file_path(@conn, :create)) %>
+
+<span><%= link "Back to games list", to: Routes.game_path(@conn, :index) %></span>

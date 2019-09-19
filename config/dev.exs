@@ -31,7 +31,7 @@ config :football_seasons, FootballSeasonsWeb.Endpoint,
   ]
 
 # Api configuration
-config :football_seasons, :plug_configuration, port: 4001
+config :football_seasons, :plug_configuration, api_port: 4001
 
 # ## SSL Support
 #

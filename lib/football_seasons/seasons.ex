@@ -132,6 +132,20 @@ defmodule FootballSeasons.Seasons do
   end
 
   @doc """
+  The name speaks for itself
+  """
+  @spec find_or_create_team_by_name(binary) :: {:ok, Team.t()} | {:error, Ecto.Changeset.t()}
+  def find_or_create_team_by_name(name) do
+    case Repo.get_by(Team, name: name) do
+      nil ->
+        create_team(%{name: name})
+
+      %{name: ^name} = team ->
+        {:ok, team}
+    end
+  end
+
+  @doc """
   Returns the list of games.
 
   ## Examples

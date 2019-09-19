@@ -6,7 +6,7 @@ defmodule FootballSeasonsWeb.GameController do
 
   def index(conn, _params) do
     games = Seasons.list_games()
-    render(conn, "index.html", games: games)
+    render(conn, "index.html", games: games, file: :file)
   end
 
   def new(conn, _params) do

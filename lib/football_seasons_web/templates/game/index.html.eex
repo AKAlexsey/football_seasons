@@ -1,5 +1,13 @@
 <h1>Listing Games</h1>
 
+<div>
+  <span><%= link "New Game", to: Routes.game_path(@conn, :new) %></span>
+</div>
+
+<div>
+  <span><%= link "Upload CSV file", to: Routes.file_path(@conn, :new) %></span>
+</div>
+
 <table>
   <thead>
     <tr>
@@ -43,4 +51,3 @@
   </tbody>
 </table>
 
-<span><%= link "New Game", to: Routes.game_path(@conn, :new) %></span>

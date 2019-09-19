@@ -1,0 +1,15 @@
+<%= form_for @file, @action, [multipart: true], fn f -> %>
+  <table>
+    <tr>
+      <td>
+        <%= label f, :csv_file %>
+        <%= file_input f, :csv_file, class: "form-control" %>
+        <%= error_tag f, :csv_file %>
+      </td>
+      <td>
+        <%= submit "Upload" %>
+      </td>
+    </tr>
+  </table>
+
+<% end %>
