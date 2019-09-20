@@ -20,19 +20,25 @@ defmodule FootballSeasonsWeb.ConnCase do
       # Import conveniences for testing with connections
       use Phoenix.ConnTest
       import FootballSeasons.Factory
+      alias FootballSeasons.Authorization.Guardian, as: GuardianImplementation
+      import FootballSeasonsWeb.Router.Helpers
+      alias Guardian.Plug, as: GuardianPlug
       import Plug.Conn
-      alias FootballSeasonsWeb.Router.Helpers, as: Routes
 
       # The default endpoint for testing
       @endpoint FootballSeasonsWeb.Endpoint
 
-      defp authorize_user(%{conn: conn, user: user}) do
-        {:ok, conn: assign(conn, :current_user, user)}
+      def authorize_user(%{conn: conn, user: user}) do
+        {:ok, conn: login_user(conn, user)}
       end
 
-      defp authorize_user(%{conn: conn}) do
+      def authorize_user(%{conn: conn}) do
         user = insert(:user)
-        {:ok, conn: assign(conn, :current_user, user)}
+        {:ok, conn: login_user(conn, user)}
+      end
+
+      defp login_user(conn, user) do
+        GuardianPlug.sign_in(conn, GuardianImplementation, user)
       end
     end
   end

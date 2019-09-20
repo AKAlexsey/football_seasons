@@ -27,7 +27,6 @@ defmodule FootballSeasonsWeb.UserController do
         |> redirect(to: user_path(conn, :show, user))
 
       {:error, changeset} ->
-        IO.puts("!!! fail user creation #{inspect(changeset)}")
         render(conn, "new.html", changeset: changeset)
     end
   end
