@@ -240,4 +240,25 @@ defmodule FootballSeasons.Seasons do
   def change_game(%Game{} = game) do
     Game.changeset(game, %{})
   end
+
+  @doc """
+  Allow to search teams by season and/or division.
+  """
+  @spec search_games({binary | nil, binary | nil}) :: list(Game.t()) | []
+  def search_games({nil, nil}), do: []
+
+  def search_games({division, nil}) do
+    from(g in Game, where: g.division == ^division)
+    |> Repo.all()
+  end
+
+  def search_games({nil, season}) do
+    from(g in Game, where: g.season == ^season)
+    |> Repo.all()
+  end
+
+  def search_games({division, season}) do
+    from(g in Game, where: g.division == ^division and g.season == ^season)
+    |> Repo.all()
+  end
 end
