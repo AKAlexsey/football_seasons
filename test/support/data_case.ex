@@ -21,6 +21,7 @@ defmodule FootballSeasons.DataCase do
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
+      import FootballSeasons.Factory
       import FootballSeasons.DataCase
     end
   end

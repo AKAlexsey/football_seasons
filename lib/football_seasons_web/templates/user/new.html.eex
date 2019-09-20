@@ -1,0 +1,9 @@
+<%= if @current_user do %>
+  <h1>New User</h1>
+<% else %>
+  <h1>Registration</h1>
+<% end %>
+
+<%= render "form.html", Map.put(assigns, :action, user_path(@conn, :create)) %>
+
+<span><%= link "Back", to: user_path(@conn, :index) %></span>

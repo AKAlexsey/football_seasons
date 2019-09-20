@@ -17,6 +17,12 @@ config :football_seasons, FootballSeasonsWeb.Endpoint,
   render_errors: [view: FootballSeasonsWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: FootballSeasons.PubSub, adapter: Phoenix.PubSub.PG2]
 
+config :football_seasons, :plug_configuration,
+  # Api port
+  api_port: 81,
+  # Restrict upload file size
+  maximum_upload_size: 10_485_760
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
@@ -24,6 +30,14 @@ config :logger, :console,
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
+
+# Mnesia configurations
+config :mnesia,
+  dir: '.mnesia/#{Mix.env()}/#{node()}'
+
+config :football_seasons, FootballSeasons.Authorization.Guardian,
+  issuer: "SimpleAuth",
+  secret_key: "U7fWw3uDlga9DRB"
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

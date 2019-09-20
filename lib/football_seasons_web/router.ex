@@ -7,20 +7,35 @@ defmodule FootballSeasonsWeb.Router do
     plug :fetch_flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+
+    plug FootballSeasons.Authorization.Pipeline
+    plug FootballSeasons.Authorization.CurrentUser
   end
 
   pipeline :api do
     plug :accepts, ["json"]
   end
 
+  pipeline :with_session do
+    plug Guardian.Plug.VerifySession
+    plug Guardian.Plug.LoadResource
+  end
+
   scope "/", FootballSeasonsWeb do
-    pipe_through :browser
+    pipe_through [:browser]
+
+    resources "/users", UserController, only: [:new, :create]
+    resources "/sessions", SessionController, only: [:new, :create, :delete]
 
     get "/", PageController, :index
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", FootballSeasonsWeb do
-  #   pipe_through :api
-  # end
+  scope "/", FootballSeasonsWeb do
+    pipe_through [:browser, :with_session]
+
+    resources "/games", GameController
+    resources "/teams", TeamController
+    resources "/users", UserController
+    resources "/files", FileController, only: [:new, :create]
+  end
 end

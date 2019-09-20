@@ -20,7 +20,14 @@ defmodule FootballSeasons.MixProject do
   def application do
     [
       mod: {FootballSeasons.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [
+        :logger,
+        :runtime_tools,
+        :memento,
+        :plug_cowboy,
+        :nimble_csv,
+        :comeonin
+      ]
     ]
   end
 
@@ -33,16 +40,37 @@ defmodule FootballSeasons.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      # Framework
       {:phoenix, "~> 1.4.10"},
       {:phoenix_pubsub, "~> 1.1"},
+
+      # Database
       {:phoenix_ecto, "~> 4.0"},
       {:ecto_sql, "~> 3.1"},
       {:postgrex, ">= 0.0.0"},
+      {:ecto_observable, "~> 0.4"},
+      # Caching database for providing high speed searching for seasons
+      {:memento, "~> 0.3.1"},
+
+      # Tools
       {:phoenix_html, "~> 2.11"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"}
+      {:plug_cowboy, "~> 2.0"},
+      {:nimble_csv, "~> 0.3"},
+      {:timex, "~> 3.6"},
+
+      # Authorization
+      {:bcrypt_elixir, "~> 2.0"},
+      {:comeonin, "~> 5.0"},
+      {:guardian, "~> 1.0"},
+
+      # Code quality
+      {:credo, "~> 1.1.0", only: [:dev, :test], runtime: false},
+
+      # Test
+      {:ex_machina, "~> 2.3", only: [:test]}
     ]
   end
 

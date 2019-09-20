@@ -23,7 +23,7 @@ defmodule FootballSeasonsWeb do
 
       import Plug.Conn
       import FootballSeasonsWeb.Gettext
-      alias FootballSeasonsWeb.Router.Helpers, as: Routes
+      import FootballSeasonsWeb.Router.Helpers
     end
   end
 
@@ -41,7 +41,7 @@ defmodule FootballSeasonsWeb do
 
       import FootballSeasonsWeb.ErrorHelpers
       import FootballSeasonsWeb.Gettext
-      alias FootballSeasonsWeb.Router.Helpers, as: Routes
+      import FootballSeasonsWeb.Router.Helpers
     end
   end
 

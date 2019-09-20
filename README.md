@@ -4,6 +4,8 @@ To start your Phoenix server:
 
   * Install dependencies with `mix deps.get`
   * Create and migrate your database with `mix ecto.setup`
+  * Create mnesia schema  `mix reset_mnesia_schema`
+  * Create database `mix ecto.reset`
   * Install Node.js dependencies with `cd assets && npm install`
   * Start Phoenix endpoint with `mix phx.server`
 
@@ -11,7 +13,43 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
 Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
 
-## Technical test
+## Performance testing
+
+I have decided to implement high performant API. To provide it i put data about all games into Mnesia table.   
+Most of code related to this purpose located in `/football_seasons/lib/football_seasons/caching/`.    
+Each record in Mnesia contains game statistics teams names and cached JSON and Protobuf versions those response
+to API clients.    
+API requests handled by plug router `FootballSeasonsWeb.ApiRouter`.    
+To compare high performant and usual version of API i added `/api/db_seasons` where data gets from DB.    
+Basically most of the time during processing does not spent into requesting to database.    
+The most time and resources consuming is `Jason.encode!()`.    
+Anyway cached version is ~60 times faster.    
+To make sure you can run performance tests. 
+
+**Algorithm**
+1. First please install k6 https://docs.k6.io/docs/installation
+2. From the root run tests for simple API `k6 run --duration 30s --rps 2000 --vus 300 performance_testing/simple_api_testing.js`
+3. From the root run tests for high performant API `k6 run --duration 30s --rps 2000 --vus 300 performance_testing/fast_api_testing.js`
+4. From the root run tests for searching simple API `k6 run --duration 30s --rps 2000 --vus 300 performance_testing/simple_api_search_testing.js`
+5. From the root run tests for searching high performant API `k6 run --duration 30s --rps 2000 --vus 300 performance_testing/fast_api_search_testing.js`
+
+After finishing each test prints report with metrics.
+Thre most valuable here is:
+
+```
+iteration_duration.........: avg=375.94ms min=65.67ms med=340.09ms max=1.42s   p(90)=565.05ms p(95)=652.63ms
+iterations.................: 20377  679.231868/s
+```
+
+`iterations per second` and `median iteration duration`
+
+For requesting all games difference twice(Cached version carry twice more requests per second).
+For searching by division and season Cached version carry four time more requests. And median request duration is three times less.   
+
+Difference is not so dramatic but it's only first version written in couple of hours, without any optimizations.
+It could be faster. I just wanted to show approach that I have been used.
+
+## Technical exercise
 
 ### Instructions
 
@@ -43,7 +81,21 @@ above Docker Compose environment
 
 1. **-** Documented HTTP Api;
 2. **-** API could response with JSON or ProtocolBuffers;
-3. **-** Carry big load. 3000 requests per second;
+3. **+** High performant api(see Performance Testing);
 4. **-** Use LiveView for displaying data in web forms;
-5. **-** Have administrator page;
-6. **-** Load data with forms or by downloading CSV files.
+5. **+** Have administrator page;
+6. **+** Load data with forms or by downloading CSV files.
+
+### Data.csv fields description
+
+Div = League Division    
+Season = Footbal season (2016-2017 -> 201617)    
+Date = Match Date (dd/mm/yy)   
+HomeTeam = Home Team  
+AwayTeam = Away Team  
+FTHG and HG = Full Time Home Team Goals  
+FTAG and AG = Full Time Away Team Goals  
+FTR and Res = Full Time Result (H=Home Win, D=Draw, A=Away Win)  
+HTHG = Half Time Home Team Goals  
+HTAG = Half Time Away Team Goals  
+HTR = Half Time Result (H=Home Win, D=Draw, A=Away Win)

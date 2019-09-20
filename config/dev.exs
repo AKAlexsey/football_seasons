@@ -7,7 +7,7 @@ config :football_seasons, FootballSeasons.Repo,
   database: "football_seasons_dev",
   hostname: "localhost",
   show_sensitive_data_on_connection_error: true,
-  pool_size: 10
+  pool_size: 80
 
 # For development, we disable any cache and enable
 # debugging and code reloading.
@@ -29,6 +29,9 @@ config :football_seasons, FootballSeasonsWeb.Endpoint,
       cd: Path.expand("../assets", __DIR__)
     ]
   ]
+
+# Api configuration
+config :football_seasons, :plug_configuration, api_port: 4001
 
 # ## SSL Support
 #
