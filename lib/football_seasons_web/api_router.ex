@@ -17,6 +17,13 @@ defmodule FootballSeasonsWeb.ApiRouter do
     send_resp(response_conn, status, body)
   end
 
+  get "/api/seasons/schema" do
+    file_path = Application.get_env(:football_seasons, :plug_configuration)[:proto_path]
+    |> Path.expand(File.cwd!())
+
+    send_file(conn, 200, file_path)
+  end
+
   # This callback added to compare velocity between requests to cache and database
   # In fact most time spent in Jason.encode!() anyway in Mnesia we have cached JSON view
   get "/api/db_seasons" do

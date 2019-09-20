@@ -26,7 +26,8 @@ defmodule FootballSeasons.MixProject do
         :memento,
         :plug_cowboy,
         :nimble_csv,
-        :comeonin
+        :comeonin,
+        :exprotobuf
       ]
     ]
   end
@@ -60,6 +61,7 @@ defmodule FootballSeasons.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:nimble_csv, "~> 0.3"},
       {:timex, "~> 3.6"},
+      {:exprotobuf, "~> 1.2.17"},
 
       # Authorization
       {:bcrypt_elixir, "~> 2.0"},

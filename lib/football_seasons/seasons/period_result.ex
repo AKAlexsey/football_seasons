@@ -1,11 +1,11 @@
-defmodule FootballSeasons.PeriodResult do
+defmodule FootballSeasons.Seasons.PeriodResult do
   @moduledoc """
   Perform HTR and FTR calculation
   """
 
-  @draw "DRAW"
-  @home "HOME"
-  @away "AWAY"
+  @draw "draw"
+  @home "home"
+  @away "away"
 
   alias FootballSeasons.Seasons.Game
 

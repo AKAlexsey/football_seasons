@@ -1,0 +1,20 @@
+message Game {
+    required string division = 1;
+    required string season = 2;
+    required string date = 3;
+    required string home_team_name = 4;
+    required string away_team_name = 5;
+    required int32 hthg = 6;
+    required int32 htag = 7;
+
+    enum TeamResult {
+        draw = 0;
+        home = 1;
+        away = 2;
+    }
+
+    required string htr = 8;
+    required int32 fthg = 9;
+    required int32 ftag = 10;
+    required string ftr = 11;
+}

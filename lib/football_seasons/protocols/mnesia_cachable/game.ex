@@ -1,5 +1,5 @@
-alias FootballSeasons.{PeriodResult, Seasons}
-alias FootballSeasons.Seasons.Game
+alias FootballSeasons.Seasons
+alias FootballSeasons.Seasons.{Game, PeriodResult}
 
 defimpl MnesiaCacheable, for: Game do
   @attributes_whitelist [
