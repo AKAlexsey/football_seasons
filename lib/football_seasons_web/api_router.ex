@@ -18,8 +18,9 @@ defmodule FootballSeasonsWeb.ApiRouter do
   end
 
   get "/api/seasons/schema" do
-    file_path = Application.get_env(:football_seasons, :plug_configuration)[:proto_path]
-    |> Path.expand(File.cwd!())
+    file_path =
+      Application.get_env(:football_seasons, :plug_configuration)[:proto_path]
+      |> Path.expand(File.cwd!())
 
     send_file(conn, 200, file_path)
   end

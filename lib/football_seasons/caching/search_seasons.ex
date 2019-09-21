@@ -40,5 +40,6 @@ defmodule FootballSeasons.Caching.SearchSeasons do
     }
   end
 
-  defp fetch_encoding(query_params), do: Map.get(query_params, @serialization_param_name, @default_serialization)
+  defp fetch_encoding(query_params),
+    do: Map.get(query_params, @serialization_param_name, @default_serialization)
 end

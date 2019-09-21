@@ -34,8 +34,10 @@ defmodule FootballSeasons.Caching.MnesiaRecordHandler.GameHandler do
     |> Enum.map(fn
       {key, value} when is_binary(value) ->
         {key, String.to_charlist(value)}
+
       {key, value = %Date{}} ->
         {key, Date.to_string(value)}
+
       {key, value} ->
         {key, value}
     end)
