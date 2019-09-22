@@ -19,29 +19,37 @@ defmodule FootballSeasonsWeb.ApiRouter do
   But it's just my hypothesis to verify it we must measure.
   Except solving exercise this module gonna demonstrate my my skill: Load testing.
 
-  Yes it's little bit wrong that module have three purposes for existing:
+  Yes it's little bit wrong but that module have three purposes for existing:
   1. Handle requests;
   2. Compare requests speed between database and cache system;
   3. Demonstrate performance testing skill.
-  But it's quite expressively describe how does project works.
+  But it's not open source solution. It's my test exercise. In real world i will put there only Requests documentation.
+  And there will be only one type of request. With Mnesia data source.
 
   So there are three types of requests:
 
   1. Workload;
-  2. Cached version velocity Demonstration;
+  2. Same as Workload tests but fetching data from Postgres Database;
   3. Technical for providing `protobuf` protocol deserialization.
 
   # API documentation
 
   Accept all requests without any authorization. Could return `JSON` or `Protobuf` values. Provide Protobuf schema.
-  In development mode uses `4001` port by default.
+  In development mode uses `4001` port by default. Configured in :football_seasons -> :plug_configuration -> :api_port.
 
-  ## Workload
+  ## Request ALL games
 
-  ### `GET /api/seasons`
+  ### API with Mnesia caching
 
-  Return all seasons in requested format `JSON` by default. Support two serialization protocols: `JSON`, `Protobuf`.
-  Protobuf schema is provided by different request `GET /api/seasons/schema`.
+  Request `GET /api/seasons`. Accept params as get params. For example `GET /api/seasons?protocol=protobuf`.
+  Accepted GET parameters:
+
+  1. `protocol` - Optional. Response serialization protocol. Allowed values: 'protobuf', 'json'.
+
+  Return all games in requested format `JSON` by default. Support two serialization protocols: `JSON`, `Protobuf`.
+  Protobuf schema is provided by different request `GET /api/seasons/schema`. Fetch data from Mnesia.
+
+  Params send as GET parameter. For example
 
   #### JSON response demonstration
 
@@ -80,22 +88,25 @@ defmodule FootballSeasonsWeb.ApiRouter do
   ]
   ```
 
-  As you see usual JSON. And here is example for `Protobuf` protocol.
+  #### Protobuf response demonstration
 
   **->** `GET /api/seasons?protocol=protobuf`
 
   **<-**
 
   ```
-  <Binary encoded file>
+  <Binary encoded>
   ```
 
-  ## Cached version velocity Demonstration
+  ### API with Postgres database
 
-  ### `GET /api/db_seasons`
+  Return all games in requested format `JSON` by default. Support two serialization protocols: `JSON`, `Protobuf`.
+  Fetch data from Postgres.
 
-  Return all seasons in requested format `JSON` by default. Support two serialization protocols: `JSON`, `Protobuf`.
-  Protobuf schema is provided by different request `GET /api/seasons/schema`.
+  Request `GET /api/db_seasons`. Accept params as get params.
+  Accepted GET parameters:
+
+  1. `protocol` - Optional. Response serialization protocol. Allowed values: 'protobuf', 'json'.
 
   #### JSON response demonstration
 
@@ -121,7 +132,7 @@ defmodule FootballSeasonsWeb.ApiRouter do
     {
       "away_team_name":"Eibar",
       "date":"2016-08-19",
-      "division":"SP1",
+      "division":"SP2",
       "ftag":1,
       "fthg":2,
       "ftr":"home",
@@ -135,8 +146,8 @@ defmodule FootballSeasonsWeb.ApiRouter do
   ```
 
   As you see - the same. The same result for `Protobuf` protocol. This is the point. **No difference**. Except
-  requesting data method. Here every request perform database request and serialize each record to `JSON` object. Or to
-  `Protobuf`
+  fetching data method. Here every request perform database request and serialize each record to `JSON` object.
+  Or to `Protobuf`.
 
   This API added to demonstrate requests processing speed.
 
@@ -148,7 +159,19 @@ defmodule FootballSeasonsWeb.ApiRouter do
   12:20:21.436 [debug] Sent 200 in 2ms                                  # <= Mnesia request speed
   ```
 
-  Moreover `Perofmrnace Testing` shows how throughput of the project.
+  As you see time ~30 (59 ms and 2 ms approximately) times faster.
+
+  ### Performance testing
+
+  In this section we gonna compare two API versions with Postgres and Mnesia using k6 load testing tool.
+  Besides that we gonna compare JSON and Protobuf output data size.
+
+  First install https://github.com/loadimpact/k6. Then you can run scripts in `performance_testing/` folder.
+
+  #### Measure Postgres API throughput
+
+  Run testing script for API with Postgres. Params `--rps` and `--vus` means "requests per second"
+  and "virtual users" accordingly.
 
   ```
   $> k6 run --duration 30s --rps 2000 --vus 300 performance_testing/simple_api_testing.js
@@ -187,7 +210,9 @@ defmodule FootballSeasonsWeb.ApiRouter do
   During load testing you can look at logs. There will be a lot of errors. But project still working under pressure.
   Process some part of requests. With delay. Soft realtime (tm).
 
-  And now we gonna compare with fast requests:
+  #### Measure Mnesia API throughput
+
+  Run load test for API with Mnesia.
 
   ```
   $> k6 run --duration 30s --rps 2000 --vus 300 performance_testing/fast_api_testing.js
@@ -196,12 +221,12 @@ defmodule FootballSeasonsWeb.ApiRouter do
   **->**
 
   ```
-  data_received..............: 16 GB  521 MB/s
+  data_received..............: 16 GB  521 MB/s      # <= Please remember this metric. We gonna compare it soon.
   data_sent..................: 3.4 MB 115 kB/s
   <...>
   http_reqs..................: 37464  1248.790745/s
   iteration_duration.........: avg=238.52ms min=4.39ms   med=217.81ms max=772.55ms p(90)=369.28ms p(95)=420.81ms
-  iterations.................: 37464  1248.790745/s # <= As you see iterations amount increased 10 times.
+  iterations.................: 37464  1248.790745/s # <= As you see iterations amount increased ~7 times.
                                                     #    And it's first algorithm version without any optimisations.
   ```
 
@@ -217,8 +242,9 @@ defmodule FootballSeasonsWeb.ApiRouter do
   12:31:27.641 [debug] Sent 200 in 12ms
   ```
 
-  And the final point here is measuring `Protobuf` traffic:
+  #### Compare JSON and Protobuf traffic measurements
 
+  This test send same requests as previous except it have get GET parameter `?protocol=protobuf`.
 
   ```
   $> k6 run --duration 30s --rps 2000 --vus 300 performance_testing/protobuf_fast_api_testing.js
@@ -252,23 +278,23 @@ defmodule FootballSeasonsWeb.ApiRouter do
   12:51:06.772 [debug] Sent 200 in 20ms
   ```
 
-  Here we also can see request processing duration.
+  Here we also can see request processing duration is ~3 times faster.
 
   ### Performance testing conclusion
 
   It's just first version of measurement. It's not so true because we haven't measured during long time. There our API
-  might behave different. But it's good starting point for further optimisation for providing: Productivity |> Reliability |> Speed.
+  might behave different. But it's good starting point for further optimisation for providing: Productivity |> Reliability |> Performance.
 
   Now we can conclude:
 
-  1. Chosen request processing algorithm works well
+  1. Chosen request processing (Mnesia <-> Plug) schema works well
   2. Elixir\\OTP provide soft real time out of the box
   3. Project works well under big load
   4. It migh support ~1500 requests per second on my local machine(Core i7 6700, 16 GB RAM.)
-  5. During measurement using `:observer.start` we found out that CPU is bottleneck. Because we have chosen mnesia.
-  It's necessary to perform a lot of calculations. So server must have enough powerfull CPU. Industrial CPU is ideal.
-  6. RAM is not big problem. But it's just short test. During endurance testing we might reveal problems.
-  7. Using right load testing tool it awesome https://github.com/loadimpact/k6:
+  5. During measurement using `:observer.start` we found out that CPU is bottleneck. Because we have chosen mnesia
+  It's necessary to perform a lot of calculations. So server must have enough powerfull CPU. Industrial CPU is ideal
+  6. RAM is not big problem. But it's just short test. During endurance testing we might reveal problems
+  7. Using right load testing tool it awesome https://github.com/loadimpact/k6
 
   ```
           /\\      |‾‾|  /‾‾/  /‾/
@@ -280,7 +306,7 @@ defmodule FootballSeasonsWeb.ApiRouter do
 
   Very helpful. <3
 
-  ## Technical for providing `protobuf` protocol deserialization
+  ## Technical API for providing `protobuf` protocol deserialization
 
   Protobuf schema is looks like:
 
@@ -316,6 +342,156 @@ defmodule FootballSeasonsWeb.ApiRouter do
   ```
   <*.proto file>
   ```
+
+  ## Search games by division and season
+
+  ### Search API with Mnesia caching
+
+  Request `GET /api/seasons/search`. Accept params as get params.
+  Accepted GET parameters:
+
+  1. `protocol` - Optional. Response serialization protocol. Allowed values: 'protobuf', 'json'.
+  2. `division` - Required. Game division. String. For example: 'SP1', 'SP2', 'D1'
+  3. `season` - Required. Game division. String. For example: '201718', '201819'.
+
+  `division` and `season` parameters required. Always there is must be at least one of them. If there will be none
+  response will return empty list. In case if no results also return empty list.
+
+  Return all games in requested format `JSON` by default.
+
+  Params send as GET parameter. For example
+
+  #### JSON response demonstration
+
+  **->** `GET /api/seasons/search?division=SP1&season=201617`
+
+  **<-**
+
+  ```
+  [
+    {
+      "away_team_name":"Essex",
+      "date":"2014-01-01",
+      "division":"SP1",
+      "ftag":7,
+      "fthg":10,
+      "ftr":"home",
+      "home_team_name":"Cowex",
+      "htag":7,
+      "hthg":6,
+      "htr":"away",
+      "season":"201617",
+    },
+    {
+      "away_team_name":"Eibar",
+      "date":"2016-08-19",
+      "division":"SP1",
+      "ftag":1,
+      "fthg":2,
+      "ftr":"home",
+      "home_team_name":"La Coruna",
+      "htag":0,
+      "hthg":0,
+      "htr":"draw",
+      "season":"201617",
+    }
+  ]
+  ```
+
+  #### Protobuf response demonstration
+
+  **->** `GET /api/seasons/search?division=SP1&season=201617&protocol=protobuf`
+
+  **<-**
+
+  ```
+  <Binary encoded>
+  ```
+
+  #### Logs and load testing
+
+  Here we also gonna compare results between Mnesia and and Postgres data source. Fot that we need metadata
+  from logs and load testing measurements.
+
+  Logs looks like:
+
+  ```
+  13:39:16.440 [debug] GET /api/seasons/search
+  13:39:16.442 [debug] Sent 200 in 1ms
+  13:47:00.810 [debug] GET /api/seasons/search
+  13:47:00.811 [debug] Sent 200 in 1ms
+  ```
+
+  Nothing unusual. Please remember request duration `1ms`. Load testing run:
+
+  ```
+  k6 run --duration 30s --rps 2000 --vus 300 performance_testing/fast_api_search_testing.js
+  ```
+
+  **->**
+
+  ```
+  data_received..............: 2.2 GB 74 MB/s       # <= If you compare size with /api/seasons you gonna see that
+  data_sent..................: 7.4 MB 248 kB/s      #    it is less. Because response return only distinct
+  <...>                                             #    by division and season games
+  iteration_duration.........: avg=151.39ms min=5.71ms   med=149.8ms max=543.64ms p(90)=162.09ms p(95)=182.35ms
+  iterations.................: 59262  1975.39572/s  # <= Almost ~2000 requests. Faster than /api/seasons.
+  ```
+
+  ### Search API with Postgres caching
+
+  Request `GET /api/db_seasons/search`. Accept params as get params.
+  Accepted GET parameters:
+
+  1. `protocol` - Optional. Response serialization protocol. Allowed values: 'protobuf', 'json'.
+  2. `division` - Required. Game division. String. For example: 'SP1', 'SP2', 'D1'
+  3. `season` - Required. Game division. String. For example: '201718', '201819'.
+
+  `division` and `season` parameters required. Always there is must be at least one of them. If there will be none
+  response will return empty list. In case if no results also return empty list.
+
+  Return all games in requested format `JSON` by default.
+
+  Response is the same as `GET /api/seasons/search`
+
+  #### Logs and load testing. Comparison with Mnesia version.
+
+  Running request
+
+  **->** `GET /api/db_seasons/search?division=SP1&season=201617`
+
+  **<-**
+
+  ```
+  13:57:07.371 [debug] GET /api/db_seasons/search
+  13:57:07.376 [debug] QUERY OK source="games" db=4.6ms queue=0.1ms
+  SELECT g0."id", g0."division", g0."season", g0."date", g0."home_team_id", g0."away_team_id", g0."fthg", g0."ftag", g0."hthg", g0."htag", g0."inserted_at", g0."updated_at" FROM "games" AS g0 WHERE ((g0."division" = $1) AND (g0."season" = $2)) ["SP1", "201617"]
+  13:57:07.381 [debug] Sent 200 in 9ms
+  13:57:30.808 [debug] GET /api/db_seasons/search
+  13:57:30.816 [debug] QUERY OK source="games" db=7.6ms queue=0.1ms
+  SELECT g0."id", g0."division", g0."season", g0."date", g0."home_team_id", g0."away_team_id", g0."fthg", g0."ftag", g0."hthg", g0."htag", g0."inserted_at", g0."updated_at" FROM "games" AS g0 WHERE ((g0."division" = $1) AND (g0."season" = $2)) ["SP1", "201617"]
+  13:57:30.822 [debug] Sent 200 in 14ms
+  ```
+
+  We can notice that postgres database requests added. And request duration `9, 14 ms`. It's ~12 times slower than cached Mnesia version.
+
+  And finally run load test:
+
+  ```
+  $> k6 run --duration 30s --rps 2000 --vus 300 performance_testing/simple_api_search_testing.js
+  ```
+
+  **->**
+
+  ```
+  data_received..............: 481 MB 16 MB/s        # <= Less than previous example because of less requests.
+  data_sent..................: 3.2 MB 105 kB/s
+  <...>
+  iteration_duration.........: avg=362.89ms min=8.48ms med=330.99ms max=1.56s   p(90)=539.1ms  p(95)=611.03ms
+  iterations.................: 24603  820.098239/s   # <= Compare to /api/seasons/search ~2.5 times slower.
+  ```
+
+  And we see significant difference between Mnesia and Postgres version Q.E.D.
   """
 
   alias FootballSeasons.Caching.SearchSeasons
