@@ -1,7 +1,39 @@
 # FootballSeasons
 
+# Table of content
+
+- [Performance testing](#performance-testing)
+- [API documentation](#api-documentation)
+  * [Request ALL games](#request-all-games)
+    + [API with Mnesia caching](#api-with-mnesia-caching)
+      - [JSON response demonstration](#json-response-demonstration)
+      - [Protobuf response demonstration](#protobuf-response-demonstration)
+    + [API with Postgres database](#api-with-postgres-database)
+      - [JSON response demonstration](#json-response-demonstration-1)
+    + [Performance testing](#performance-testing-1)
+      - [Measure Postgres API throughput](#measure-postgres-api-throughput)
+      - [Measure Mnesia API throughput](#measure-mnesia-api-throughput)
+      - [Compare JSON and Protobuf traffic measurements](#compare-json-and-protobuf-traffic-measurements)
+    + [Performance testing conclusion](#performance-testing-conclusion)
+  * [Technical API for providing `protobuf` protocol deserialization](#technical-api-for-providing-protobuf-protocol-deserialization)
+  * [Search games by division and season](#search-games-by-division-and-season)
+    + [Search API with Mnesia caching](#search-api-with-mnesia-caching)
+      - [JSON response demonstration](#json-response-demonstration-2)
+      - [Protobuf response demonstration](#protobuf-response-demonstration-1)
+      - [Logs and load testing](#logs-and-load-testing)
+    + [Search API with Postgres caching](#search-api-with-postgres-caching)
+      - [Logs and load testing. Comparison with Mnesia version.](#logs-and-load-testing-comparison-with-mnesia-version)
+* [Technical exercise](#technical-exercise)
+  + [Instructions](#instructions)
+  + [Requirements](#requirements)
+  + [Features](#features)
+  + [Data.csv fields description](#datacsv-fields-description)
+
+Requires `elixir 1.8.2` and `erlang 20.2.4`. Necessary versions described in .tool-versions file in root folder.
+
 To start your Phoenix server:
 
+  * Install necessary elixir and erlang versions
   * Install dependencies with `mix deps.get`
   * Create and migrate your database with `mix ecto.setup`
   * Create mnesia schema  `mix reset_mnesia_schema`
@@ -15,7 +47,7 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
 I have decided to implement high performant API. To provide it i put data about all games into Mnesia table.   
 Most of code related to this purpose located in `/football_seasons/lib/football_seasons/caching/`.    
-Each record in Mnesia contains game statistics teams names and cached JSON and Protobuf versions those response
+Each record in Mnesia contains game statistics and cached JSON and Protobuf versions those return
 to API clients.    
 API requests handled by plug router `FootballSeasonsWeb.ApiRouter`.    
 To compare high performant and usual version of API i added `/api/db_seasons` where data gets from DB.    
@@ -63,13 +95,6 @@ Mnesia provides solid query language allowing to design complicated requests.
 
 But it's just my hypothesis to verify it we must measure.
 Except solving exercise this module gonna demonstrate my my skill: Load testing.
-
-Yes it's little bit wrong but that module have three purposes for existing:
-1. Handle requests;
-2. Compare requests speed between database and cache system;
-3. Demonstrate performance testing skill.
-But it's not open source solution. It's my test exercise. In real world i will put there only Requests documentation.
-And there will be only one type of request. With Mnesia data source.
 
 So there are three types of requests:
 
@@ -342,11 +367,11 @@ It's necessary to perform a lot of calculations. So server must have enough powe
 7. Using right load testing tool it awesome https://github.com/loadimpact/k6
 
 ```
-        /\\      |‾‾|  /‾‾/  /‾/
-   /\\  /  \\     |  |_/  /  / /
-  /  \\/    \\    |      |  /  ‾‾\\
- /          \\   |  |‾\\  \\ | (_) |
-/ __________ \\  |__|  \\__\\ \\___/ .io
+        /\      |‾‾|  /‾‾/  /‾/
+   /\  /  \     |  |_/  /  / /
+  /  \/    \    |      |  /  ‾‾\
+ /          \   |  |‾\  \ | (_) |
+/ __________ \  |__|  \__\ \___/ .io
 ```
 
 Very helpful. <3
@@ -538,9 +563,9 @@ iterations.................: 24603  820.098239/s   # <= Compare to /api/seasons/
 
 And we see significant difference between Mnesia and Postgres version Q.E.D.
 
-## Technical exercise
+# Technical exercise
 
-### Instructions
+## Instructions
 
 Write a simple Elixir application that serves the football results included in the attached data.csv file.
 The application must expose a public HTTP API allowing users to:
@@ -553,7 +578,7 @@ We do not want you to overdo the solution, but we also want you to have an oppor
 Feel free to add as many optional features as you deem necessary but make sure that you get the required steps right first. 
 Use this opportunity wisely and do not hesitate to contact us should you have any questions.
 
-### Requirements
+## Requirements
 
 1. You have 1 week to send us the solution to the exercise, you may submit it earlier if you’d
 finish it within this given time
@@ -566,7 +591,7 @@ traffic across 3 instances of the application
 above Docker Compose environment
 7. (Bonus) Code instrumentation (e.g. logging, metrics)
 
-### Features
+## Features
 
 1. **+** Documented HTTP Api;
 2. **+** API could response with JSON or ProtocolBuffers;
@@ -576,7 +601,7 @@ above Docker Compose environment
 6. **+** Load data with forms or by downloading CSV files;
 7. **-** (optional) logging system.
 
-### Data.csv fields description
+## Data.csv fields description
 
 Div = League Division    
 Season = Footbal season (2016-2017 -> 201617)    

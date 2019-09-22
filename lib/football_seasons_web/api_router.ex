@@ -297,11 +297,11 @@ defmodule FootballSeasonsWeb.ApiRouter do
   7. Using right load testing tool it awesome https://github.com/loadimpact/k6
 
   ```
-          /\\      |‾‾|  /‾‾/  /‾/
-     /\\  /  \\     |  |_/  /  / /
-    /  \\/    \\    |      |  /  ‾‾\\
-   /          \\   |  |‾\\  \\ | (_) |
-  / __________ \\  |__|  \\__\\ \\___/ .io
+          /\      |‾‾|  /‾‾/  /‾/
+     /\  /  \     |  |_/  /  / /
+    /  \/    \    |      |  /  ‾‾\
+   /          \   |  |‾\  \ | (_) |
+  / __________ \  |__|  \__\ \___/ .io
   ```
 
   Very helpful. <3
