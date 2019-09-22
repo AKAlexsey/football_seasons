@@ -67,6 +67,9 @@ defmodule FootballSeasons.MixProject do
       {:timex, "~> 3.6"},
       {:exprotobuf, "~> 1.2.17"},
 
+      # Release
+      {:distillery, "~> 1.5"},
+
       # Authorization
       {:bcrypt_elixir, "~> 2.0"},
       {:comeonin, "~> 5.0"},

@@ -570,8 +570,9 @@ And we see significant difference between Mnesia and Postgres version Q.E.D.
 Write a simple Elixir application that serves the football results included in the attached data.csv file.
 The application must expose a public HTTP API allowing users to:
 1. List the league and season pairs (e.g. La Liga 2017-2018) for which there are results available
-2. Fetch the results for a specific league and season pair
-Users must be able to retrieve the results for a specific league and season pair formatted in JSON and Protocol Buffers.
+2. Fetch the results for a specific league and season pair    
+3. Users must be able to retrieve the results for a specific league and season pair formatted in JSON and Protocol Buffers
+
 As for the technology stack, you are free to choose the libraries and frameworks that you consider most appropriate to solve this exercise.
 We have kept the requirements to a bare minimum. 
 We do not want you to overdo the solution, but we also want you to have an opportunity to show us all the tricks you know. 
