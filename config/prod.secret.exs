@@ -16,7 +16,7 @@ config :football_seasons, FootballSeasons.Repo,
   username: "postgres",
   password: "postgres",
   database: "football_seasons_dev",
-  hostname: "localhost",
+  hostname: "172.19.0.2",
   pool_size: 20
 
 secret_key_base = "VTV4aa/E4tW6qqoBOGcrh+ECR4zL+8OMa8U0Y69kb10CAD4VDIdNxCrvEqVjr2zR"

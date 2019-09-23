@@ -4,8 +4,6 @@ services:
   football_seasons:
     image: "football-seasons-17:00"
     build: .
-    ports:
-      - "4000:4001"
     depends_on:
       - localhost
   localhost:
