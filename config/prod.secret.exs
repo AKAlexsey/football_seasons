@@ -13,8 +13,11 @@ database_url = "ecto://postgres:postgres@localhost/football_seasons_dev"
 
 config :football_seasons, FootballSeasons.Repo,
   # ssl: true,
-  url: database_url,
-  pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
+  username: "postgres",
+  password: "postgres",
+  database: "football_seasons_dev",
+  hostname: "localhost",
+  pool_size: 20
 
 secret_key_base = "VTV4aa/E4tW6qqoBOGcrh+ECR4zL+8OMa8U0Y69kb10CAD4VDIdNxCrvEqVjr2zR"
 #  System.get_env("SECRET_KEY_BASE") ||

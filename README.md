@@ -43,6 +43,10 @@ To start your Phoenix server:
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
+## Docker compose
+
+`pg_createcluster 10 main start` - it was necessary to run it in container with postgres starts to work 
+
 ## Performance testing
 
 I have decided to implement high performant API. To provide it i put data about all games into Mnesia table.   
@@ -62,7 +66,7 @@ To make sure you can run performance tests.
 3. From the root run tests for high performant API `k6 run --duration 30s --rps 2000 --vus 300 performance_testing/fast_api_testing.js`
 4. From the root run tests for searching simple API `k6 run --duration 30s --rps 2000 --vus 300 performance_testing/simple_api_search_testing.js`
 5. From the root run tests for searching high performant API `k6 run --duration 30s --rps 2000 --vus 300 performance_testing/fast_api_search_testing.js`
-6. From the root run tests for protobuf project `k6 run --duration 30s --rps 2000 --vus 300 performance_testing/protobuf_simple_api_testing.js`
+6. From the root run tests for protobuf project `k6 run --duration 30s --rps 2000 --vus 300 performance_testing/protobuf_fast_api_testing.js`
 
 After finishing each test prints report with metrics.
 Thre most valuable here is:
