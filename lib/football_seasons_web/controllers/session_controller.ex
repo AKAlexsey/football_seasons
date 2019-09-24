@@ -5,7 +5,7 @@ defmodule FootballSeasonsWeb.SessionController do
   alias FootballSeasons.Users
   alias Guardian.Plug, as: GuardianPlug
 
-  import Bcrypt, only: [verify_pass: 2, no_user_verify: 0]
+  import Comeonin.Bcrypt, only: [checkpw: 2, dummy_checkpw: 0]
 
   plug :scrub_params, "session" when action in ~w(create)a
 
@@ -18,14 +18,14 @@ defmodule FootballSeasonsWeb.SessionController do
 
     result =
       cond do
-        user && verify_pass(password, user.password_hash) ->
+        user && checkpw(password, user.password_hash) ->
           {:ok, login(conn, user)}
 
         user ->
           {:error, :unauthorized, conn}
 
         true ->
-          no_user_verify()
+          dummy_checkpw()
           {:error, :not_found, conn}
       end
 

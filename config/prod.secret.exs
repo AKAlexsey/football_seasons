@@ -4,28 +4,32 @@
 # remember to add this file to your .gitignore.
 use Mix.Config
 
-database_url =
-  System.get_env("DATABASE_URL") ||
-    raise """
-    environment variable DATABASE_URL is missing.
-    For example: ecto://USER:PASS@HOST/DATABASE
-    """
+database_url = "ecto://postgres:postgres@localhost/football_seasons_dev"
+#  System.get_env("DATABASE_URL") ||
+#    raise """
+#    environment variable DATABASE_URL is missing.
+#    For example: ecto://USER:PASS@HOST/DATABASE
+#    """
 
 config :football_seasons, FootballSeasons.Repo,
   # ssl: true,
-  url: database_url,
-  pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
+  username: "postgres",
+  password: "postgres",
+  database: "football_seasons_dev",
+  hostname: "172.19.0.2",
+  pool_size: 20
 
-secret_key_base =
-  System.get_env("SECRET_KEY_BASE") ||
-    raise """
-    environment variable SECRET_KEY_BASE is missing.
-    You can generate one by calling: mix phx.gen.secret
-    """
+secret_key_base = "VTV4aa/E4tW6qqoBOGcrh+ECR4zL+8OMa8U0Y69kb10CAD4VDIdNxCrvEqVjr2zR"
+#  System.get_env("SECRET_KEY_BASE") ||
+#    raise """
+#    environment variable SECRET_KEY_BASE is missing.
+#    You can generate one by calling: mix phx.gen.secret
+#    """
 
 config :football_seasons, FootballSeasonsWeb.Endpoint,
   http: [:inet6, port: String.to_integer(System.get_env("PORT") || "4000")],
-  secret_key_base: secret_key_base
+  secret_key_base: secret_key_base,
+  server: true
 
 # ## Using releases (Elixir v1.9+)
 #

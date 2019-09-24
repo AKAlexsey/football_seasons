@@ -32,7 +32,7 @@ defmodule FootballSeasons.Users.User do
         put_change(
           changeset,
           :password_hash,
-          Bcrypt.hash_pwd_salt(password)
+          Comeonin.Bcrypt.hashpwsalt(password)
         )
 
       _ ->

@@ -7,13 +7,9 @@ defmodule Mix.Tasks.ResetMnesiaSchema do
 
   use Mix.Task
 
-  alias FootballSeasons.Caching.Game
+  alias FootballSeasons.Caching.CacheRecordService
 
   def run(_) do
-    File.rm_rf("#{File.cwd!()}/#{Application.get_env(:mnesia, :dir)}")
-    Memento.Schema.create([Node.self()])
-    :mnesia.start()
-    Memento.Table.create(Game)
-    :mnesia.stop()
+    CacheRecordService.reset_mnesia()
   end
 end
