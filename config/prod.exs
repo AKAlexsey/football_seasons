@@ -12,6 +12,18 @@ use Mix.Config
 config :football_seasons, FootballSeasonsWeb.Endpoint,
   cache_static_manifest: "priv/static/cache_manifest.json"
 
+config :football_seasons, FootballSeasons.Repo,
+  username: "postgres",
+  password: "postgres",
+  database: "football_seasons_dev",
+  hostname: "db",
+  pool_size: 20
+
+config :football_seasons, FootballSeasonsWeb.Endpoint,
+  http: [:inet6, port: String.to_integer(System.get_env("PORT") || "4000")],
+  secret_key_base: secret_key_base,
+  server: true
+
 # Do not print debug messages in production
 config :logger, level: :debug
 

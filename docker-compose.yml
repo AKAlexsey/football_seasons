@@ -2,15 +2,14 @@ version: '3'
 
 services:
   football_seasons:
-    image: "football-seasons-15:14-"
+    image: "football-seasons-22:01"
     build: .
     ports:
       - "4000:4000"
       - "4001:4001"
-      - "200-3000"
     depends_on:
-      - localhost
-  localhost:
+      - db
+  db:
     image: "postgres:10"
     environment:
       POSTGRES_USER: postgres
