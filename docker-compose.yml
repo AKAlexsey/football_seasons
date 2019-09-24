@@ -1,14 +1,55 @@
+# Boilerplate for containers
 version: '3'
 
+volumes:
+  pgdata:
+
+networks:
+  football_seasons_network:
+
 services:
-  football_seasons:
-    image: "football-seasons-22:01"
+  football_seasons_1:
+    image: "football-seasons-23:45"
     build: .
-    ports:
-      - "4000:4000"
-      - "4001:4001"
+    expose:
+      - "4000"
+      - "4001"
+    environment:
+      ADMIN_PORT: 4000
+      API_PORT: 4001
     depends_on:
       - db
+    networks:
+      football_seasons_network:
+
+  football_seasons_2:
+    image: "football-seasons-23:45"
+    build: .
+    expose:
+      - "4000"
+      - "4001"
+    environment:
+      ADMIN_PORT: 4000
+      API_PORT: 4001
+    depends_on:
+      - db
+    networks:
+      football_seasons_network:
+
+  football_seasons_3:
+    image: "football-seasons-23:45"
+    build: .
+    expose:
+      - "4000"
+      - "4001"
+    environment:
+      ADMIN_PORT: 4000
+      API_PORT: 4001
+    depends_on:
+      - db
+    networks:
+      football_seasons_network:
+
   db:
     image: "postgres:10"
     environment:
@@ -19,6 +60,20 @@ services:
     restart: always
     volumes:
       - pgdata:/var/lib/postgresql
+    networks:
+      football_seasons_network:
 
-volumes:
-  pgdata:
+  haproxy:
+    image: eeacms/haproxy
+    container_name: football_seasons_haproxy
+    volumes:
+      - pgdata:/var/lib/postgresql
+    expose:
+      - 4000
+      - 4001
+    depends_on:
+      - football_seasons_1
+      - football_seasons_2
+      - football_seasons_3
+    networks:
+      football_seasons_network:

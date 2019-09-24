@@ -2,6 +2,9 @@
 
 # Table of content
 
+- [Introduction](#introduction)
+- [Up and running](#up-and-running)
+- [Docker compose](#docker-compose)
 - [Performance testing](#performance-testing)
 - [API documentation](#api-documentation)
   * [Request ALL games](#request-all-games)
@@ -29,7 +32,84 @@
   + [Features](#features)
   + [Data.csv fields description](#datacsv-fields-description)
 
-Requires `elixir 1.8.2` and `erlang 20.2.4`. Necessary versions described in .tool-versions file in root folder.
+## Introduction
+
+Hello. I decided to write introduction to show you what is important in that project. To clarify what was my points,
+goals and problems during solving this exercise.
+
+It was interesting exercise. And thanks for freedom. I used it to show:
+1. Code quality
+2. TDD
+3. Providing high performance skills
+4. Performance testing skills
+And of course all this project itself is big story about me as professional.
+
+I think I am "Upper Middle is about to Senior" level. Like to use Elixir and it's functional paradigm.
+This project I tried to show as many as i can. 
+
+Code quality is very important thing i use for it credo `mix credo --strict` and auto formatting `mix format --check-formatted`.
+This is minimum necessary steps those still increase code readability and programming experience.
+
+As for TDD this project coverage is `mix test --cover` -> 54.41% . It's not big value, but it's just 
+test project. Tests is suitable for long term code. Those will be modified many times in the future. 
+For exercise purposes high test coverage is not so necessary. In production i write tests for most of functional.
+Moreover tests saved my time many times. For now tests written for business logic. There is lack of tests for 
+requests(API requests) but this disadvantage compensates by performance tests located in `performance_testing`
+I will talk about that later. 
+
+Also i wanted to show you approach those i used on one of my past projects to design agile 
+high performant API. Application have two endpoints. First - Phoenix router `FootballSeasonsWeb.Router`.
+Second - Plug router `FootballSeasonsWeb.ApiRouter`.
+Phoenix router - provide Admin page.
+Plug router - high loaded API requests.
+Admin page - use as data source Postgres.
+API - use as data source Mnesia.
+
+This architecture allow us:
+
+1. Manage project using Admin page
+2. Design complex API requests by using Mnesia query language
+3. Provide high performance API with short delays (To measure it i used Load testing)
+4. Separate business logic from technical tasks
+
+Besides that I designed solution for automate caching data from postgres to Mnesia.
+All of code located in `/lib/football_seasons/caching/*` and `/lib/football_seasons/observers/*`
+And just implementation in `lib/football_seasons/seasons/game.ex`.
+
+```
+defmodule FootballSeasons.Seasons.Game do
+  @moduledoc false
+
+  use Ecto.Schema
+  use Observable, :notifier
+
+  <...>
+  observations do
+    action(:insert, [CacheRecordObserver])
+    action(:update, [CacheRecordObserver])
+    action(:delete, [CacheRecordObserver])
+  end
+end
+```
+
+Elegant solution of eternal `Cache invalidation` problem. Cache automatically receive data on any CRUD operation.
+
+Also i think that it's important to measure during engineering process. That's why i included performance testing.
+Common data is inside [Performance testing](#performance-testing) section. Also API documentation contains
+tests and measurements [description](#performance-testing-1).
+
+One of points in exercise is "Document HTTP API". I decided just add description inside [this](#api-documentation) file.
+Also separately API documentation is inside `FootballSeasonsWeb.ApiRouter` documentation. Just `mix deps.get && mix docs`
+and look at `ApiRouter` documentation.
+
+Also i decided to create completely ready application with authorization.
+Basically authorization is not so strict. You can register and instantly login. No email verification.
+But it exist.
+
+## Up and running
+
+Requires `elixir 1.8.2` and `erlang 21.1.1`. Necessary versions described in .tool-versions file in root folder.
+If you have asdf just `asdf install` from root folder. And wait ... 
 
 To start your Phoenix server:
 
@@ -605,6 +685,8 @@ above Docker Compose environment
 5. **+** Have administrator page;
 6. **+** Load data with forms or by downloading CSV files;
 7. **-** (optional) logging system.
+
+Not all scheduler features have implemented. But it's still good result.
 
 ## Data.csv fields description
 

@@ -13,7 +13,7 @@ RUN cd assets && \
     mix phx.digest
 
 RUN rm -Rf _build && \
-    mix deps.get &&\
+    mix deps.get && \
     mix compile
 
 RUN mix release

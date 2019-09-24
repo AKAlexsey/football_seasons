@@ -20,9 +20,12 @@ config :football_seasons, FootballSeasons.Repo,
   pool_size: 20
 
 config :football_seasons, FootballSeasonsWeb.Endpoint,
-  http: [:inet6, port: String.to_integer(System.get_env("PORT") || "4000")],
-  secret_key_base: secret_key_base,
+  http: [:inet6, port: String.to_integer(System.get_env("ADMIN_PORT") || "4000")],
+  secret_key_base: "die6jooFshaeg6DoeeNg6oohIeH3eesunueyee5DmeShuJ4w",
   server: true
+
+config :football_seasons, :plug_configuration,
+  api_port: String.to_integer(System.get_env("API_PORT") || "4001")
 
 # Do not print debug messages in production
 config :logger, level: :debug

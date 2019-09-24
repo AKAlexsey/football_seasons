@@ -1,0 +1,25 @@
+# Boilerplate for containers
+version: '3'
+
+services:
+  football_seasons:
+    image: "football-seasons-22:01"
+    build: .
+    ports:
+      - "4000:4000"
+      - "4001:4001"
+    depends_on:
+      - db
+  db:
+    image: "postgres:10"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: football_seasons_dev
+      PGDATA: /var/lib/postgresql/data/pgdata
+    restart: always
+    volumes:
+      - pgdata:/var/lib/postgresql
+
+volumes:
+  pgdata:
