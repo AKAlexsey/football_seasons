@@ -9,6 +9,7 @@ defmodule FootballSeasons.Caching.SearchGameService do
   @doc """
   Return all games in Game mnesia table
   """
+  @spec all_games(binary) :: binary | list
   def all_games(encoding) do
     perform_searching([], encoding)
   end
@@ -44,6 +45,7 @@ defmodule FootballSeasons.Caching.SearchGameService do
   @doc """
   Request games by given division and/or season
   """
+  @spec search_games({binary | nil, binary | nil, binary}) :: binary | list
   def search_games({nil, nil, @protobuf}), do: <<>>
   def search_games({nil, nil, _encoding}), do: []
 

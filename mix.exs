@@ -80,7 +80,8 @@ defmodule FootballSeasons.MixProject do
       {:ex_doc, "~> 0.21", only: :dev, runtime: false},
 
       # Test
-      {:ex_machina, "~> 2.3", only: [:test]}
+      {:ex_machina, "~> 2.3", only: [:test]},
+      {:faker, "~> 0.12", only: :test}
     ]
   end
 

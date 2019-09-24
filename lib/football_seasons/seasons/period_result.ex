@@ -7,12 +7,10 @@ defmodule FootballSeasons.Seasons.PeriodResult do
   @home "home"
   @away "away"
 
-  alias FootballSeasons.Seasons.Game
-
   def enum_list, do: [@draw, @home, @away]
 
-  @spec get_htr(Game.t()) :: binary()
-  def get_htr(%Game{hthg: hthg, htag: htag}) do
+  @spec get_htr(map()) :: binary()
+  def get_htr(%{hthg: hthg, htag: htag}) do
     cond do
       hthg == htag -> @draw
       hthg > htag -> @home
@@ -20,8 +18,8 @@ defmodule FootballSeasons.Seasons.PeriodResult do
     end
   end
 
-  @spec get_ftr(Game.t()) :: binary()
-  def get_ftr(%Game{fthg: fthg, ftag: ftag}) do
+  @spec get_ftr(map()) :: binary()
+  def get_ftr(%{fthg: fthg, ftag: ftag}) do
     cond do
       fthg == ftag -> @draw
       fthg > ftag -> @home
