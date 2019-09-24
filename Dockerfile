@@ -7,14 +7,14 @@ RUN yum install -y gcc-c++ make epel-release
 RUN yum install nodejs
 RUN npm install yarn -g
 
-RUN rm -Rf _build && \
-    mix deps.get &&\
-    mix compile
-
 RUN cd assets && \
     npm install && \
     cd .. && \
     mix phx.digest
+
+RUN rm -Rf _build && \
+    mix deps.get &&\
+    mix compile
 
 RUN mix release
 

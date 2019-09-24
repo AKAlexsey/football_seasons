@@ -2,8 +2,12 @@ version: '3'
 
 services:
   football_seasons:
-    image: "football-seasons-17:00"
+    image: "football-seasons-15:14-"
     build: .
+    ports:
+      - "4000:4000"
+      - "4001:4001"
+      - "200-3000"
     depends_on:
       - localhost
   localhost:
