@@ -542,6 +542,10 @@ defmodule FootballSeasonsWeb.ApiRouter do
     send_resp(conn, 200, games)
   end
 
+  get "/api/health_check" do
+    send_resp(conn, 200, "Ok")
+  end
+
   match _ do
     send_resp(conn, 404, "Not found")
   end

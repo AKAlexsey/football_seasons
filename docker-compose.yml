@@ -6,49 +6,45 @@ volumes:
 
 networks:
   football_seasons_network:
+    driver: overlay
 
 services:
-  football_seasons_1:
-    image: "football-seasons-23:45"
+  football_season_1:
+    image: "football-seasons-cluster"
     build: .
-    ports:
+    expose:
       - 4000
       - 4001
     environment:
-      ADMIN_PORT: 4000
-      API_PORT: 4001
+      SERVICE_PORTS: 4001
     depends_on:
       - db
     networks:
-      football_seasons_network:
+      - football_seasons_network
 
-  football_seasons_2:
-    image: "football-seasons-23:45"
-    build: .
-    ports:
+  football_season_2:
+    image: "football-seasons-cluster"
+    expose:
       - 4000
       - 4001
     environment:
-      ADMIN_PORT: 4000
-      API_PORT: 4001
+      SERVICE_PORTS: 4001
     depends_on:
       - db
     networks:
-      football_seasons_network:
+      - football_seasons_network
 
-  football_seasons_3:
-    image: "football-seasons-23:45"
-    build: .
-    ports:
+  football_season_3:
+    image: "football-seasons-cluster"
+    expose:
       - 4000
       - 4001
     environment:
-      ADMIN_PORT: 4000
-      API_PORT: 4001
+      SERVICE_PORTS: 4001
     depends_on:
       - db
     networks:
-      football_seasons_network:
+      - football_seasons_network
 
   db:
     image: "postgres:10"
@@ -61,19 +57,25 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql
     networks:
-      football_seasons_network:
+      - football_seasons_network
 
   haproxy:
-    image: eeacms/haproxy
+    image: haproxy:1.7
+    build: ./haproxy
     container_name: football_seasons_haproxy
     volumes:
-      - pgdata:/var/lib/postgresql
+      - ./haproxy:/usr/local/etc/haproxy
     ports:
       - "4000:4000"
       - "4001:4001"
     depends_on:
-      - football_seasons_1
-      - football_seasons_2
-      - football_seasons_3
+      - football_season_1
+      - football_season_2
+      - football_season_3
     networks:
-      football_seasons_network:
+      - football_seasons_network
+    environment:
+      - BALANCE=roundrobin
+    deploy:
+      placement:
+        constraints: [node.role == manager]

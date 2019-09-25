@@ -123,9 +123,15 @@ To start your Phoenix server:
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
-## Docker compose
+## Docker
 
-`pg_createcluster 10 main start` - it was necessary to run it in container with postgres starts to work 
+I decided to put project inside container as release. Because it's best practice to build
+releases of elixir project in production. Creating container is inside `Dockerfile`. 
+
+Cluster implemented with docker compose. It's configuration is inside `docker-compose.yml`
+To run it just `docker-compose build && docker-compose up` from the root of the project.
+
+For cluster there was needed Haproxy. So docker image and configuration located in `/haproxy/` folder.  
 
 ## Performance testing
 

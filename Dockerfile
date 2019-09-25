@@ -2,6 +2,8 @@ FROM qixxit/elixir-centos as build
 COPY . .
 
 ENV MIX_ENV=prod
+ENV ADMIN_PORT=4000
+ENV API_PORT=4001
 
 RUN yum install -y gcc-c++ make epel-release
 RUN yum install nodejs
