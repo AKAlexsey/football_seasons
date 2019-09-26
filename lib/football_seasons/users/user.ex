@@ -23,6 +23,7 @@ defmodule FootballSeasons.Users.User do
     |> changeset(params)
     |> cast(params, [:password], [])
     |> validate_length(:password, min: 6, max: 100)
+    |> unique_constraint(:email)
     |> hash_password
   end
 

@@ -133,6 +133,142 @@ Please contact:
 Requires `elixir 1.8.2` and `erlang 21.1.1`. Necessary versions described in .tool-versions file in root folder.
 If you have asdf just `asdf install` from root folder. And wait ... 
 
+# Table of content
+
+- [Introduction](#introduction)
+- [Contact](#contact)
+- [Up and running](#up-and-running)
+- [Docker compose](#docker-compose)
+- [Performance testing](#performance-testing)
+- [API documentation](#api-documentation)
+  * [Request ALL games](#request-all-games)
+    + [API with Mnesia caching](#api-with-mnesia-caching)
+      - [JSON response demonstration](#json-response-demonstration)
+      - [Protobuf response demonstration](#protobuf-response-demonstration)
+    + [API with Postgres database](#api-with-postgres-database)
+      - [JSON response demonstration](#json-response-demonstration-1)
+    + [Performance testing](#performance-testing-1)
+      - [Measure Postgres API throughput](#measure-postgres-api-throughput)
+      - [Measure Mnesia API throughput](#measure-mnesia-api-throughput)
+      - [Compare JSON and Protobuf traffic measurements](#compare-json-and-protobuf-traffic-measurements)
+    + [Performance testing conclusion](#performance-testing-conclusion)
+  * [Technical API for providing `protobuf` protocol deserialization](#technical-api-for-providing-protobuf-protocol-deserialization)
+  * [Search games by division and season](#search-games-by-division-and-season)
+    + [Search API with Mnesia caching](#search-api-with-mnesia-caching)
+      - [JSON response demonstration](#json-response-demonstration-2)
+      - [Protobuf response demonstration](#protobuf-response-demonstration-1)
+      - [Logs and load testing](#logs-and-load-testing)
+    + [Search API with Postgres caching](#search-api-with-postgres-caching)
+      - [Logs and load testing. Comparison with Mnesia version.](#logs-and-load-testing-comparison-with-mnesia-version)
+* [Technical exercise](#technical-exercise)
+  + [Instructions](#instructions)
+  + [Requirements](#requirements)
+  + [Features](#features)
+  + [Data.csv fields description](#datacsv-fields-description)
+
+## Introduction
+
+Hello. I decided to write introduction to show you what is important in that project. To clarify what was my points,
+goals and problems during solving this exercise.
+
+It was interesting exercise. And thanks for freedom. I used it to show:
+1. Code quality
+2. TDD
+3. Providing high performance skills
+4. Performance testing skills
+And of course all this project itself is big story about me as professional.
+
+I think I am "Upper Middle is about to Senior" level. Like to use Elixir and it's functional paradigm.
+This project I tried to show as many as i can. 
+
+[Exercise description](#technical-exercise) this is common task description.
+
+Code quality is very important thing i use for it credo `mix credo --strict` and auto formatting `mix format --check-formatted`.
+This is minimum necessary steps those still increase code readability and programming experience.
+
+As for TDD this project coverage is `mix test --cover` -> 54.15% . It's not big value, but it's just 
+test project. Tests is suitable for long term code. Those will be modified many times in the future. 
+For exercise purposes high test coverage is not so necessary. In production i write tests for most of functional.
+Moreover tests saved my time many times. For now tests written for business logic. There is lack of tests for 
+requests(API requests) but this disadvantage compensates by performance tests located in `performance_testing`
+I will talk about that later. 
+
+Also i wanted to show you approach those i used on one of my past projects to design agile 
+high performant API. Application have two endpoints. First - Phoenix router `FootballSeasonsWeb.Router`.
+Second - Plug router `FootballSeasonsWeb.ApiRouter`.
+Phoenix router - provide Admin page.
+Plug router - high loaded API requests.
+Admin page - use as data source Postgres.
+API - use as data source Mnesia.
+
+This architecture allow us:
+
+1. Manage project using Admin page
+2. Design complex API requests by using Mnesia query language
+3. Provide high performance API with short delays (To measure it i used Load testing)
+4. Separate business logic from technical tasks
+
+Besides that I designed solution for automate caching data from postgres to Mnesia.
+All of code located in `/lib/football_seasons/caching/*` and `/lib/football_seasons/observers/*`
+And just implementation in `lib/football_seasons/seasons/game.ex`.
+
+```
+defmodule FootballSeasons.Seasons.Game do
+  @moduledoc false
+
+  use Ecto.Schema
+  use Observable, :notifier
+
+  <...>
+  observations do
+    action(:insert, [CacheRecordObserver])
+    action(:update, [CacheRecordObserver])
+    action(:delete, [CacheRecordObserver])
+  end
+end
+```
+
+Elegant solution of eternal `Cache invalidation` problem. Cache automatically receive data on any CRUD operation.
+
+Also i think that it's important to measure during engineering process. That's why i included performance testing.
+Common data is inside [Performance testing](#performance-testing) section. Also API documentation contains
+tests and measurements [description](#performance-testing-1).
+
+One of points in exercise is "Document HTTP API". I decided just add description inside [this](#api-documentation) file.
+Also separately API documentation is inside `FootballSeasonsWeb.ApiRouter` documentation. Just `mix deps.get && mix docs`
+and look at `ApiRouter` documentation.
+
+Also i decided to create completely ready application with authorization.
+Basically authorization is not so strict. You can register and instantly login. No email verification.
+But it exist.
+
+All work related to:
+
+```
+4. Create a Dockerfile for the application
+5. Create a Docker Compose file for the application with 1 HAProxy instance load balancing
+```
+
+Requirements. Is described in [Docker section](#docker-compose). This part was most difficult for me. 
+Because i haven't got experience with it. But finally i have implemented solution that i am really proud of.
+In short - i put Elixir releases into docker. It's best practice way to implement containers. So i hope this
+point i have done successfully.
+
+It was interesting task. Thanks you. I have got many pleasure doing that. And study something new. And i hope 
+you also gonna like it.
+
+## Contact
+
+Please contact:
+    Email:    struan.dirk.29@gmail.com
+    LinkedIn: https://www.linkedin.com/in/alexey-kurdyukov/
+    Github:   https://github.com/CarefreeSlacker
+
+## Up and running
+
+Requires `elixir 1.8.2` and `erlang 21.1.1`. Necessary versions described in .tool-versions file in root folder.
+If you have asdf just `asdf install` from root folder. And wait ... 
+
 To start your Phoenix server:
 
   * Install necessary elixir and erlang versions
@@ -142,6 +278,11 @@ To start your Phoenix server:
   * Create database `mix ecto.reset`
   * Install Node.js dependencies with `cd assets && npm install`
   * Start Phoenix endpoint with `mix phx.server`
+
+Project might not to start still. Because i wrote this documentation on my machine. Might be some 
+system packages also required. I tested on Ubuntu 18.4, Core i7, 16 Gb RAM. I am developer. My computer 
+is full of some software. So might be i missed some step at installation. If it gonna happen 
+I sure you could find solution easily. In other case please [contact](#contact) me. 
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser. Project is empty. But you can
 fill it from index page `/games` page by uploading CSV file. Football games statistic 
@@ -154,6 +295,7 @@ releases of elixir project in production. Creating container is inside `Dockerfi
 
 Cluster implemented with docker compose. It's configuration is inside `docker-compose.yml`
 To run it just `docker-compose build && docker-compose up` from the root of the project.
+Sometimes assets does not compile from first build. Than repeat. Everything must works. Tested.
 
 For cluster there was needed Haproxy. So docker image and configuration located in `/haproxy/` folder.  
 
