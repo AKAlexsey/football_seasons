@@ -6,21 +6,21 @@ defmodule FootballSeasons.Authorization.Service do
   alias FootballSeasons.Repo
   alias FootballSeasons.Users.User
 
-  import Bcrypt, only: [verify_pass: 2, no_user_verify: 0]
+  import Comeonin.Bcrypt, only: [checkpw: 2, dummy_checkpw: 0]
 
   @spec authorize(email :: binary, password :: binary) :: {:ok}
   def authorize(email, password) do
     user = Repo.get_by(User, email: email)
 
     cond do
-      user && verify_pass(password, user.password_hash) ->
+      user && checkpw(password, user.password_hash) ->
         {:ok, user}
 
       user ->
         {:error, :unauthorized}
 
       true ->
-        no_user_verify()
+        dummy_checkpw()
         {:error, :not_found}
     end
   end

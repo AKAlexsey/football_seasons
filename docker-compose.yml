@@ -1,0 +1,81 @@
+# Boilerplate for containers
+version: '3'
+
+volumes:
+  pgdata:
+
+networks:
+  football_seasons_network:
+    driver: overlay
+
+services:
+  football_season_1:
+    image: "football-seasons-cluster"
+    build: .
+    expose:
+      - 4000
+      - 4001
+    environment:
+      SERVICE_PORTS: 4001
+    depends_on:
+      - db
+    networks:
+      - football_seasons_network
+
+  football_season_2:
+    image: "football-seasons-cluster"
+    expose:
+      - 4000
+      - 4001
+    environment:
+      SERVICE_PORTS: 4001
+    depends_on:
+      - db
+    networks:
+      - football_seasons_network
+
+  football_season_3:
+    image: "football-seasons-cluster"
+    expose:
+      - 4000
+      - 4001
+    environment:
+      SERVICE_PORTS: 4001
+    depends_on:
+      - db
+    networks:
+      - football_seasons_network
+
+  db:
+    image: "postgres:10"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: football_seasons_dev
+      PGDATA: /var/lib/postgresql/data/pgdata
+    restart: always
+    volumes:
+      - pgdata:/var/lib/postgresql
+    networks:
+      - football_seasons_network
+
+  haproxy:
+    image: haproxy:1.7
+    build: ./haproxy
+    container_name: football_seasons_haproxy
+    volumes:
+      - ./haproxy:/usr/local/etc/haproxy
+    ports:
+      - "4000:4000"
+      - "4001:4001"
+    depends_on:
+      - football_season_1
+      - football_season_2
+      - football_season_3
+    networks:
+      - football_seasons_network
+    environment:
+      - BALANCE=roundrobin
+    deploy:
+      placement:
+        constraints: [node.role == manager]

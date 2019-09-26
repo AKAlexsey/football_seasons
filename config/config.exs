@@ -19,9 +19,11 @@ config :football_seasons, FootballSeasonsWeb.Endpoint,
 
 config :football_seasons, :plug_configuration,
   # Api port
-  api_port: 81,
+  api_port: 4001,
   # Restrict upload file size
-  maximum_upload_size: 10_485_760
+  maximum_upload_size: 10_485_760,
+  # Path to *.proto file where described games schema
+  proto_path: "./priv/protobuf/game.proto"
 
 # Configures Elixir's Logger
 config :logger, :console,

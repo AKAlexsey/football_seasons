@@ -10,8 +10,22 @@ use Mix.Config
 # which you should run after static files are built and
 # before starting your production server.
 config :football_seasons, FootballSeasonsWeb.Endpoint,
-  url: [host: "example.com", port: 80],
   cache_static_manifest: "priv/static/cache_manifest.json"
+
+config :football_seasons, FootballSeasons.Repo,
+  username: "postgres",
+  password: "postgres",
+  database: "football_seasons_dev",
+  hostname: "db",
+  pool_size: 20
+
+config :football_seasons, FootballSeasonsWeb.Endpoint,
+  http: [:inet6, port: String.to_integer(System.get_env("ADMIN_PORT") || "4000")],
+  secret_key_base: "die6jooFshaeg6DoeeNg6oohIeH3eesunueyee5DmeShuJ4wjooFshaeg6DoeeNg6oohIe",
+  server: true
+
+config :football_seasons, :plug_configuration,
+  api_port: String.to_integer(System.get_env("API_PORT") || "4001")
 
 # Do not print debug messages in production
 config :logger, level: :info

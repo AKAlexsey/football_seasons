@@ -4,13 +4,17 @@ defmodule FootballSeasons.MixProject do
   def project do
     [
       app: :football_seasons,
-      version: "0.1.0",
-      elixir: "~> 1.5",
+      version: "0.9.0",
+      elixir: "~> 1.8.2",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      docs: [
+        main: "FootballSeasons",
+        extras: ["README.md"]
+      ]
     ]
   end
 
@@ -26,7 +30,8 @@ defmodule FootballSeasons.MixProject do
         :memento,
         :plug_cowboy,
         :nimble_csv,
-        :comeonin
+        :comeonin,
+        :exprotobuf
       ]
     ]
   end
@@ -60,17 +65,23 @@ defmodule FootballSeasons.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:nimble_csv, "~> 0.3"},
       {:timex, "~> 3.6"},
+      {:exprotobuf, "~> 1.2.17"},
+
+      # Release
+      {:distillery, "~> 1.5"},
 
       # Authorization
-      {:bcrypt_elixir, "~> 2.0"},
-      {:comeonin, "~> 5.0"},
+      {:bcrypt_elixir, "~> 0.12"},
+      {:comeonin, "~> 4.0"},
       {:guardian, "~> 1.0"},
 
       # Code quality
       {:credo, "~> 1.1.0", only: [:dev, :test], runtime: false},
+      {:ex_doc, "~> 0.21", only: :dev, runtime: false},
 
       # Test
-      {:ex_machina, "~> 2.3", only: [:test]}
+      {:ex_machina, "~> 2.3", only: [:test]},
+      {:faker, "~> 0.12", only: :test}
     ]
   end
 
