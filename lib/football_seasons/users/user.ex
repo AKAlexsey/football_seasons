@@ -23,6 +23,7 @@ defmodule FootballSeasons.Users.User do
     |> changeset(params)
     |> cast(params, [:password], [])
     |> validate_length(:password, min: 6, max: 100)
+    |> unique_constraint(:email)
     |> hash_password
   end
 
@@ -32,7 +33,7 @@ defmodule FootballSeasons.Users.User do
         put_change(
           changeset,
           :password_hash,
-          Bcrypt.hash_pwd_salt(password)
+          Comeonin.Bcrypt.hashpwsalt(password)
         )
 
       _ ->
