@@ -47,10 +47,12 @@ And of course all this project itself is big story about me as professional.
 I think I am "Upper Middle is about to Senior" level. Like to use Elixir and it's functional paradigm.
 This project I tried to show as many as i can. 
 
+[Exercise description](#technical-exercise) this is common task description.
+
 Code quality is very important thing i use for it credo `mix credo --strict` and auto formatting `mix format --check-formatted`.
 This is minimum necessary steps those still increase code readability and programming experience.
 
-As for TDD this project coverage is `mix test --cover` -> 54.41% . It's not big value, but it's just 
+As for TDD this project coverage is `mix test --cover` -> 54.15% . It's not big value, but it's just 
 test project. Tests is suitable for long term code. Those will be modified many times in the future. 
 For exercise purposes high test coverage is not so necessary. In production i write tests for most of functional.
 Moreover tests saved my time many times. For now tests written for business logic. There is lack of tests for 
@@ -106,6 +108,26 @@ Also i decided to create completely ready application with authorization.
 Basically authorization is not so strict. You can register and instantly login. No email verification.
 But it exist.
 
+All work related to:
+
+```
+4. Create a Dockerfile for the application
+5. Create a Docker Compose file for the application with 1 HAProxy instance load balancing
+```
+
+Requirements. Is described in [Docker section](#docker-compose). This part was most difficult for me. 
+Because i haven't got experience with it. But finally i have implemented solution that i am really proud of.
+In short - i put Elixir releases into docker. It's best practice way to implement containers. So i hope this
+point i have done successfully.
+
+It was interesting task. Thanks you. I have got many pleasure doing that. And study something new. And i hope 
+you also gonna like it.
+
+Please contact:
+    Email:    struan.dirk.29@gmail.com
+    LinkedIn: https://www.linkedin.com/in/alexey-kurdyukov/
+    Github:   https://github.com/CarefreeSlacker
+
 ## Up and running
 
 Requires `elixir 1.8.2` and `erlang 21.1.1`. Necessary versions described in .tool-versions file in root folder.
@@ -121,7 +143,9 @@ To start your Phoenix server:
   * Install Node.js dependencies with `cd assets && npm install`
   * Start Phoenix endpoint with `mix phx.server`
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+Now you can visit [`localhost:4000`](http://localhost:4000) from your browser. Project is empty. But you can
+fill it from index page `/games` page by uploading CSV file. Football games statistic 
+file in `/priv/Data/Data.csv`.
 
 ## Docker
 
