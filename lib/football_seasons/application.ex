@@ -9,6 +9,7 @@ defmodule FootballSeasons.Application do
 
   def start(_type, _args) do
     children = [
+      {Phoenix.PubSub, [name: FootballSeasons.PubSub, adapter: Phoenix.PubSub.PG2]},
       BackgroundJobsWorker,
       Cowboy.child_spec(
         scheme: :http,

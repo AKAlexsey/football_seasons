@@ -5,7 +5,7 @@
 # is restricted to this project.
 
 # General application configuration
-use Mix.Config
+import Config
 
 config :football_seasons,
   ecto_repos: [FootballSeasons.Repo]
@@ -15,7 +15,7 @@ config :football_seasons, FootballSeasonsWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "DROG3oubXLCS+r17jl5m6fJ7HucMcwnPP+t5Xzjsc87xaFwXvik4ImRRm7semQaF",
   render_errors: [view: FootballSeasonsWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: FootballSeasons.PubSub, adapter: Phoenix.PubSub.PG2]
+  pubsub_server: FootballSeasons.PubSub
 
 config :football_seasons, :plug_configuration,
   # Api port

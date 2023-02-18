@@ -5,7 +5,7 @@ defmodule FootballSeasons.MixProject do
     [
       app: :football_seasons,
       version: "0.9.0",
-      elixir: "~> 1.8.2",
+      elixir: "~> 1.13.3",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
@@ -46,20 +46,20 @@ defmodule FootballSeasons.MixProject do
   defp deps do
     [
       # Framework
-      {:phoenix, "~> 1.4.10"},
-      {:phoenix_pubsub, "~> 1.1"},
+      {:phoenix, "~> 1.6.16"},
+      {:phoenix_pubsub, "~> 2.1.1"},
 
       # Database
-      {:phoenix_ecto, "~> 4.0"},
-      {:ecto_sql, "~> 3.1"},
+      {:phoenix_ecto, "~> 4.4"},
+      {:ecto_sql, "~> 3.9"},
       {:postgrex, ">= 0.0.0"},
       {:ecto_observable, "~> 0.4"},
       # Caching database for providing high speed searching for seasons
       {:memento, "~> 0.3.1"},
 
       # Tools
-      {:phoenix_html, "~> 2.11"},
-      {:phoenix_live_reload, "~> 1.2", only: :dev},
+      {:phoenix_html, "~> 3.3"},
+      {:phoenix_live_reload, "~> 1.4", only: :dev},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
@@ -73,7 +73,7 @@ defmodule FootballSeasons.MixProject do
       # Authorization
       {:bcrypt_elixir, "~> 0.12"},
       {:comeonin, "~> 4.0"},
-      {:guardian, "~> 1.0"},
+      {:guardian, "~> 2.3"},
 
       # Code quality
       {:credo, "~> 1.1.0", only: [:dev, :test], runtime: false},
