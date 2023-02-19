@@ -2,10 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: postgres-deployment
-  labels:
-    app: postgres
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: postgres
@@ -15,30 +13,30 @@ spec:
         app: postgres
     spec:
       containers:
-      - name: postgres
-        image: postgres:13.6
-        ports:
-        - containerPort: 8080
-        env:
-        - name: POSTGRES_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: football-seasons-secret
-              key: postgres-password
-        - name: POSTGRES_USER
-          valueFrom:
-            secretKeyRef:
-              name: football-seasons-secret
-              key: postgres-user
+        - name: postgres
+          image: postgres:13.6
+          imagePullPolicy: "IfNotPresent"
+          ports:
+          - containerPort: 5432
+          envFrom:
+            - configMapRef:
+                name: football-seasons-config-map
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgresdata
+      volumes:
+        - name: postgresdata
+          persistentVolumeClaim:
+            claimName: postgres-persistent-volume
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: postgres-service
 spec:
+  type: NodePort 
   selector:
     app: postgres
   ports:
-    - protocol: TCP
-      port: 8080
-      targetPort: 8080
+    - port: 5432
+      nodePort: 30001

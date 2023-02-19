@@ -65,6 +65,7 @@ defmodule FootballSeasons.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:nimble_csv, "~> 0.3"},
       {:timex, "~> 3.6"},
+      {:gpb, "~> 4.0", manager: :rebar3, override: true},
       {:exprotobuf, "~> 1.2.17"},
 
       # Release

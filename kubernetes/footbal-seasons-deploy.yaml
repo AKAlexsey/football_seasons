@@ -5,7 +5,7 @@ metadata:
   labels:
     app: football-seasons-products
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: football-seasons-products
@@ -16,21 +16,14 @@ spec:
     spec:
       containers:
       - name: football-seasons-products
-        image: football-seasons:2
+        image: football_seasons:0.9.0-19.02.23
         imagePullPolicy: Never
         ports:
         - containerPort: 4000
-        env:
-        - name: PG_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: football-seasons-secret
-              key: postgres-password
-        - name: PG_USER
-          valueFrom:
-            secretKeyRef:
-              name: football-seasons-secret
-              key: postgres-user
+        - containerPort: 4001
+        envFrom:
+          - configMapRef:
+              name: football-seasons-config-map
 ---
 apiVersion: v1
 kind: Service
@@ -42,6 +35,12 @@ spec:
   type: LoadBalancer
   ports:
     - protocol: TCP
+      name: 'web-port'
       port: 4000
       targetPort: 4000
-      nodePort: 30001
+      nodePort: 30002
+    - protocol: TCP
+      name: 'api-port'
+      port: 4001
+      targetPort: 4001
+      nodePort: 30003

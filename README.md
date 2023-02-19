@@ -134,7 +134,7 @@ Requires `elixir 1.8.2` and `erlang 21.1.1`. Necessary versions described in .to
 If you have asdf just `asdf install` from root folder. And wait ... 
 
 # Table of content
-
+  
 - [Introduction](#introduction)
 - [Contact](#contact)
 - [Up and running](#up-and-running)
