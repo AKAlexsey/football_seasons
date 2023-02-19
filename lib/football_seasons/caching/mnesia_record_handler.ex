@@ -27,8 +27,6 @@ defmodule FootballSeasons.Caching.MnesiaRecordHandler do
   end
 
   defp pass_data_to_handler(%{model_name: model_name} = data) do
-    raise "Unknown model_name: #{inspect(model_name)} in #{__MODULE__} given data: #{
-            inspect(data)
-          }"
+    raise "Unknown model_name: #{inspect(model_name)} in #{__MODULE__} given data: #{inspect(data)}"
   end
 end

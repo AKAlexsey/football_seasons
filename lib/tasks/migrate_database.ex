@@ -9,7 +9,7 @@ defmodule FootballSeasons.Tasks.MigrateDatabase do
   def run(args \\ [])
 
   def run(_args) do
-    ext_name = @app |> to_string |> String.replace("_", "-")
+    # ext_name = @app |> to_string |> String.replace("_", "-")
 
     # Start requisite apps
     IO.puts("==> Starting applications..")

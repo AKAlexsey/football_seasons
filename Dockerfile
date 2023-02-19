@@ -12,7 +12,6 @@ RUN apk add --no-cache make
 
 RUN mix local.hex --force
 RUN mix local.rebar --force
-RUN mix phx.digest
 
 # RUN cd assets
 # RUN npm install
@@ -22,27 +21,21 @@ RUN rm -Rf _build && \
     mix deps.get && \
     mix compile
 
+RUN npm install --prefix ./assets
+RUN npm run deploy --prefix ./assets
+RUN mix phx.digest
+
+RUN rm -Rf _build
+
 RUN mix release
 
 RUN APP_NAME="football_seasons"
-RUN RELEASE_DIR=`ls -d _build/prod/rel/`
+RUN rm -rf /export
 RUN mkdir /export
-RUN cp -rf ./_build/prod/rel/ ./export
+RUN cp -rf ./_build/prod/rel/football_seasons/ ./export
 
 
-FROM node:16.14.2-alpine as assets_builder
-
-ARG app
-
-WORKDIR /app
-
-RUN apk add bash
-
-COPY --from=build /app ./
-COPY deploy/build_assets.sh ./
-
-RUN ./build_assets.sh
-
+# Release container
 FROM elixir:1.13.4-otp-25-alpine
 RUN mkdir /opt/app &&\
     mkdir /opt/app/priv &&\
@@ -50,8 +43,10 @@ RUN mkdir /opt/app &&\
 
 WORKDIR "/opt/app"
 
-COPY --from=build /export/ .
+COPY --from=build /export/football_seasons/ .
 COPY --from=build /priv/protobuf/game.proto ./priv/protobuf
+# not sure if it necessary
+RUN chmod +x /opt/app/bin/football_seasons
 
 ENTRYPOINT ["/opt/app/bin/football_seasons"]
 CMD ["foreground"]

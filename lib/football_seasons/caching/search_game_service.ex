@@ -4,7 +4,7 @@ defmodule FootballSeasons.Caching.SearchGameService do
   """
 
   @protobuf "protobuf"
-  @json "json"
+  # @json "json"
 
   alias FootballSeasons.Caching.Game
 
